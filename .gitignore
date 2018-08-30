@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+*.opendb
+
+AdvancedVision/\.vs/AdvancedVision/v15/\.suo
+
+*.ipch
