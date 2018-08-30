@@ -6,6 +6,6 @@ public:
 	~AppStart();
 
 private:
-	void WaitKey() const;
+	static void WaitKey();
 };
 

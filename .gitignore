@@ -36,3 +36,15 @@
 AdvancedVision/\.vs/AdvancedVision/v15/\.suo
 
 *.ipch
+
+AdvancedVision/x64/Debug/
+
+AdvancedVision/AdvancedVision/x64/Debug/
+
+AdvancedVision/AdvancedVision/Debug/
+
+*.rc
+
+*.aps
+
+*.db
