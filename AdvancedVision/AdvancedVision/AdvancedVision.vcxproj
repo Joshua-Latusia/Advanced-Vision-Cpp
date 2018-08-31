@@ -133,13 +133,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppStart.h" />
+    <ClInclude Include="avansvisionlib.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppStart.cpp" />
+    <ClCompile Include="avansvisionlib.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AdvancedVision.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\basisfiguren.jpg" />
+    <Image Include="Res\bolenpijl.jpg" />
+    <Image Include="Res\monsters.jpg" />
+    <Image Include="Res\rummikub.JPG" />
+    <Image Include="Res\rummikub0.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
