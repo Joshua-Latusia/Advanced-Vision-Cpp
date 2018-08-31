@@ -1,5 +1,4 @@
 #include "Camera.h"
-#include <opencv2/highgui/highgui_c.h>
 #include <opencv2/highgui/highgui.hpp>
 
 

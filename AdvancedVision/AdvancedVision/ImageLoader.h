@@ -1,0 +1,20 @@
+#pragma once
+#define OUT
+#include <string>
+#include <opencv2/core/mat.hpp>
+
+class ImageLoader
+{
+public:
+	ImageLoader();
+	~ImageLoader();
+	
+	/// <summary>
+	/// Loads the image from path.
+	/// </summary>
+	/// <param name="image">The image.</param>
+	/// <param name="path">The path.</param>
+	/// <returns>false if loading fails, true if loading succeeds</returns>
+	static bool LoadImageFromPath(OUT cv::Mat& image, std::string path);
+};
+

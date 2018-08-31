@@ -135,12 +135,16 @@
     <ClInclude Include="AppStart.h" />
     <ClInclude Include="avansvisionlib.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ImageConverter.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppStart.cpp" />
     <ClCompile Include="avansvisionlib.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ImageConverter.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AdvancedVision.rc" />
