@@ -3,22 +3,48 @@
 #include <opencv2/opencv.hpp>
 #include "Camera.h"
 #include <opencv2/highgui/highgui.hpp>
+#include "ImageLoader.h"
+#include "ImageConverter.h"
 
 #define WEBCAM 0
 
 int main()
 {
-	Camera Camera;
-
-	while (true)
+	// Read in image and diplay it
+	cv::Mat image;
+	std::vector<std::vector<cv::Point>> contourVector;
+	ImageLoader::LoadImageFromPath(image,
+	                               R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\monsters.jpg)");
+	if(!image.data)
 	{
-		Camera.CaptureImage();
-		Camera.DisplayImage();
+		std::cout << "Could not open file" << std::endl;
 
-		// escape loop
-		if (cv::waitKey(1) == 27)
-			break;
 	}
+	else
+	{
+		namedWindow("Normal image", cv::WINDOW_AUTOSIZE);
+		cv::imshow("Normal image", image);
+		ImageConverter::GetContours(image, contourVector);
+
+
+		// Otherwise the image will be gray
+		cv::waitKey(1);
+	}
+	
+
+	// Display camera
+	//Camera Camera;
+	//while (true)
+	//{
+	//	Camera.CaptureImage();
+	//	Camera.DisplayImage();
+
+	//	// escape loop
+	//	if (cv::waitKey(1) == 27)
+	//		break;
+	//}
+
+	AppStart::WaitKey();
 
 }
 

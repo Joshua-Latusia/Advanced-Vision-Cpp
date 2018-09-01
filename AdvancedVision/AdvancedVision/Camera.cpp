@@ -19,6 +19,6 @@ void Camera::CaptureImage()
 
 void Camera::DisplayImage() const
 {
-	cv::imshow("camera", CapturedImage);;
+	cv::imshow("camera", CapturedImage);
 }
 
