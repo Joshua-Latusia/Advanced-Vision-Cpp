@@ -1,5 +1,6 @@
 #include "MooreBoundaryTracer.h"
 #include <opencv2/core/mat.hpp>
+#include <iostream>
 
 const std::array<cv::Point, 8> NeighbourCoordinates
 {
@@ -25,33 +26,32 @@ MooreBoundaryTracer::~MooreBoundaryTracer()
 void MooreBoundaryTracer::FindFirstNonZeroPixel(const cv::Mat & image, cv::Point& nonZeroPixel, cv::Point& previousNeighbour)
 {
 	// loop through pixels
-	for(int i = 0; i < image.rows; ++i)
+	for(int y = 0; y < image.rows; y++) // y coordinates
 	{
-		for(int j = 0; j < image.cols; ++j)
+		for(int x = 0; x < image.cols; x++) // x coordinates
 		{
 			// Check if image is nonzero
-			cv::Point point(i, j);
-			if(image.at<point> != 0)
+			if(image.at<ushort>(cv::Point(x,y)) != 0)
 			{
-				nonZeroPixel.x = i;
-				nonZeroPixel.y = j;
+				nonZeroPixel.x = x;
+				nonZeroPixel.y = y;
 
 				// If there is no pixel on the left go upward
-				if(j == 0)
+				if(x == 0)
 				{
 					// if its the top left pixel
-					if(i == 0)
+					if(y == 0)
 					{
 						throw std::invalid_argument("The topleft pixel is the first non zero pixel");
 					}
 					previousNeighbour.x = -1;
-					previousNeighbour.y = j;
+					previousNeighbour.y = y;
 
 				}
 				else
 				{
-					previousNeighbour.x = i;
-					previousNeighbour.y = j -1;
+					previousNeighbour.x = x;
+					previousNeighbour.y = y -1;
 				}
 				return;
 			}
@@ -59,4 +59,17 @@ void MooreBoundaryTracer::FindFirstNonZeroPixel(const cv::Mat & image, cv::Point
 	}
 
 	throw std::invalid_argument("No nonzero pixel found in the image");
+}
+
+void MooreBoundaryTracer::PrintImageToConsole(const cv::Mat image)
+{
+	for (int i = 0; i < image.rows; ++i)
+	{
+		for (int j = 0; j < image.cols; ++j)
+		{
+			const char *c = int(image.at<ushort>(i, j)) == 0 ? "0" : "1";
+			std::cout << *c ;
+		}
+		std::cout << " Row:" << i <<"\n";
+	}
 }
