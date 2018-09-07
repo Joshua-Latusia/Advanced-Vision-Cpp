@@ -12,7 +12,7 @@ ImageLoader::~ImageLoader()
 {
 }
 
-bool ImageLoader::LoadImageFromPath(OUT cv::Mat& image, const std::string& path)
+bool ImageLoader::loadImageFromPath(OUT cv::Mat& image, const std::string& path)
 {
 	image = cv::imread(path, CV_LOAD_IMAGE_COLOR);
 	return image.data;

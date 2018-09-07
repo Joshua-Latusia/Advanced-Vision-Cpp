@@ -4,7 +4,7 @@
 
 Camera::Camera()
 {
-	WebCamCaputure = cv::VideoCapture(WEBCAM);
+	webCamCaputure = cv::VideoCapture(WEBCAM);
 }
 
 
@@ -12,13 +12,13 @@ Camera::~Camera()
 {
 }
 
-void Camera::CaptureImage()
+void Camera::captureImage()
 {
-	WebCamCaputure.read(CapturedImage);
+	webCamCaputure.read(capturedImage);
 }
 
-void Camera::DisplayImage() const
+void Camera::displayImage() const
 {
-	cv::imshow("camera", CapturedImage);
+	cv::imshow("camera", capturedImage);
 }
 

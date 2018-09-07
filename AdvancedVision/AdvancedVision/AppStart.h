@@ -4,7 +4,7 @@ class AppStart
 public:
 	AppStart();
 	~AppStart();
-	static void WaitKey();
+	static void waitKey();
 
 };
 

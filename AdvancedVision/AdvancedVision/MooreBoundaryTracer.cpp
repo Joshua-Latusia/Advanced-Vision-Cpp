@@ -2,16 +2,16 @@
 #include <opencv2/core/mat.hpp>
 #include <iostream>
 
-const std::array<cv::Point, 8> NeighbourCoordinates
+const std::vector<cv::Point> neighbour_coordinates
 {
 	cv::Point{ 0, -1 },		// left
 	cv::Point{ -1, -1 }, 	// top left
-	cv::Point{ -1, 0 }, 	// top
-	cv::Point{ -1, 1 }, 	// top right
-	cv::Point{ 0, 1 },		// right
+	cv::Point{ 0, -1 }, 	// top
+	cv::Point{ 1, -1 }, 	// top right
+	cv::Point{ 1, 0 },		// right
 	cv::Point{ 1, 1 },		// bottom right
-	cv::Point{ 1, 0 },		// bottom
-	cv::Point{ 1 , -1 }, 	// bottom left
+	cv::Point{ 0, 1 },		// bottom
+	cv::Point{ -1 ,1 }, 	// bottom left
 };
 
 MooreBoundaryTracer::MooreBoundaryTracer()
@@ -23,7 +23,7 @@ MooreBoundaryTracer::~MooreBoundaryTracer()
 {
 }
 
-void MooreBoundaryTracer::FindFirstNonZeroPixel(const cv::Mat & image, cv::Point& nonZeroPixel, cv::Point& previousNeighbour)
+void MooreBoundaryTracer::findFirstNonZeroPixel(const cv::Mat & image, cv::Point& nonZeroPixel, cv::Point& previousNeighbour)
 {
 	// loop through pixels
 	for(int y = 0; y < image.rows; y++) // y coordinates
@@ -61,7 +61,30 @@ void MooreBoundaryTracer::FindFirstNonZeroPixel(const cv::Mat & image, cv::Point
 	throw std::invalid_argument("No nonzero pixel found in the image");
 }
 
-void MooreBoundaryTracer::PrintImageToConsole(const cv::Mat image)
+void MooreBoundaryTracer::getBoundaryPoints(const cv::Mat& image, cv::Point& currentPixel, cv::Point& backtrackPixel)
+{
+	std::vector<cv::Point> boundaryPoints;
+	boundaryPoints.push_back(currentPixel);
+
+	// Save start pixel
+	cv::Point startingPoint = currentPixel;
+
+	// Get 3 * 3 Matrix around starting point
+	cv::Mat neigbours = image(cv::Rect(currentPixel.x - 1, currentPixel.y - 1, 3, 3));
+
+	// Get backtrack offset and index in neighbour array
+	cv::Point offset = currentPixel - backtrackPixel;
+	//int index = GetOffSetIndex(offset);
+
+
+	// Search clockwise for non zero pixel unit startpoint is back
+
+	// Probably need loop here
+
+
+}
+
+void MooreBoundaryTracer::printImageToConsole(const cv::Mat image)
 {
 	for (int i = 0; i < image.rows; ++i)
 	{
@@ -72,4 +95,9 @@ void MooreBoundaryTracer::PrintImageToConsole(const cv::Mat image)
 		}
 		std::cout << " Row:" << i <<"\n";
 	}
+}
+
+int MooreBoundaryTracer::getOffSetIndex(const cv::Point offset)
+{
+	return std::distance(neighbour_coordinates.begin(),std::find(neighbour_coordinates.begin(), neighbour_coordinates.end(), offset));
 }

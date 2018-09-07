@@ -13,19 +13,19 @@ public:
 	/// <summary>
 	/// Captures the image.
 	/// </summary>
-	void CaptureImage();
+	void captureImage();
 
 	/// <summary>
 	/// Displays the image
 	/// </summary>
-	void DisplayImage() const;
+	void displayImage() const;
 
 
 	/// <summary>
 	/// The most recent captured image
 	/// </summary>
-	cv::Mat CapturedImage;
+	cv::Mat capturedImage;
 	
-	cv::VideoCapture WebCamCaputure;
+	cv::VideoCapture webCamCaputure;
 };
 

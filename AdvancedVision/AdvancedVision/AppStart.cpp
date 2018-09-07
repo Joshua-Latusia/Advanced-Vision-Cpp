@@ -15,7 +15,7 @@ int main()
 	// Read in image and diplay it
 	cv::Mat image, greyImage, binaryImage;
 	std::vector<std::vector<cv::Point>> contourVector;
-	ImageLoader::LoadImageFromPath(image,
+	ImageLoader::loadImageFromPath(image,
 	                               R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\rummikub0.jpg)");
 	if(!image.data)
 	{
@@ -41,8 +41,8 @@ int main()
 		// detect the first non zero pixel
 		cv::Point firstPixel;
 		cv::Point previousPixel;
-		MooreBoundaryTracer::PrintImageToConsole(binaryImage);
-		MooreBoundaryTracer::FindFirstNonZeroPixel(binaryImage, firstPixel, previousPixel);
+		MooreBoundaryTracer::printImageToConsole(binaryImage);
+		MooreBoundaryTracer::findFirstNonZeroPixel(binaryImage, firstPixel, previousPixel);
 		std::cout << "First pixel coords X: " << firstPixel.x << "  y: " << firstPixel.y;
 		waitKey(0);
 
@@ -61,7 +61,7 @@ int main()
 	//		break;
 	//}
 
-	AppStart::WaitKey();
+	AppStart::waitKey();
 
 }
 
@@ -78,7 +78,7 @@ AppStart::~AppStart()
 /// <summary>
 /// Waits for key input so app doesn't close.
 /// </summary>
-void AppStart::WaitKey()
+void AppStart::waitKey()
 {
 	char c;
 	std::cin >> c;
