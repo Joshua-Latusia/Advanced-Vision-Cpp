@@ -43,6 +43,9 @@ int main()
 		cv::Point previousPixel;
 		MooreBoundaryTracer::printImageToConsole(binaryImage);
 		MooreBoundaryTracer::findFirstNonZeroPixel(binaryImage, firstPixel, previousPixel);
+
+		MooreBoundaryTracer::getBoundaryPoints(binaryImage, firstPixel, previousPixel);
+
 		std::cout << "First pixel coords X: " << firstPixel.x << "  y: " << firstPixel.y;
 		waitKey(0);
 
