@@ -14,30 +14,14 @@ ImageConverter::~ImageConverter()
 
 void ImageConverter::toGrayImage(cv::Mat& source, cv::Mat& output)
 {
-	cv::cvtColor(source, output, CV_BGR2GRAY);
+	cvtColor(source, output, CV_BGR2GRAY);
 }
 
-// https://www.codeproject.com/Articles/1105045/Tracing-Boundary-in-D-Image-Using-Moore-Neighborho
-// https://github.com/TarasMartynyuk/Boundary-Tracing-Moore-Neighbours
-int ImageConverter::getContours(const cv::Mat& image, OUT std::vector<std::vector<cv::Point>>& contourVecVec)
-{
-	cv::Point b0;
-	cv::Point c0;
 
-	// Call Moore boundary file
-
-	// Get upermost left boundary
-	
-	// Set west neighbour of this left upermost 
-
-	// looping through the rest
-
-	return 1;
-}
 
 void ImageConverter::getBinaryImage(const cv::Mat& image, cv::Mat& output, double thresh, double maxval)
 {
-	cv::threshold(image, output, thresh, maxval, cv::THRESH_BINARY);
+	threshold(image, output, thresh, maxval, cv::THRESH_BINARY);
 }
 
 double ImageConverter::getBendingEnergy(const std::vector<cv::Point>* contourVec)

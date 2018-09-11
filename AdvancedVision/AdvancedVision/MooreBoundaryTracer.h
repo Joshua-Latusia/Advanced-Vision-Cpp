@@ -16,7 +16,23 @@ public:
 	static void findFirstNonZeroPixel(const cv::Mat& image, cv::Point& nonZeroPixel, cv::Point& previousNeighbour);
 	
 	/// <summary>
-	/// Gets the boundary points of an image using the Moore boundary algorithm.
+	/// Gets the back track pixel.
+	/// </summary>
+	/// <param name="image">The image.</param>
+	/// <param name="currentPixel">The current pixel.</param>
+	/// <param name="backtrackPixel">The backtrack pixel.</param>
+	static void getBackTrackPixel(const cv::Mat& image, cv::Point& currentPixel, cv::Point& backtrackPixel);
+
+	/// <summary>
+	/// finds all contours of all blobs in a image 
+	/// </summary>
+	/// <param name="image">Binary image</param>
+	/// <param name="contourVecVec">The contour vec vec.</param>
+	/// <returns>amount of objects</returns>
+	static int getContours(const cv::Mat& image, std::vector<std::vector<cv::Point>>& contourVecVec, int threshAreaMin = 1, int threshAreaMax = INT_MAX);
+
+	/// <summary>
+	/// Gets the boundary points of an single blob of an image using the Moore boundary algorithm.
 	/// https://www.codeproject.com/Articles/1105045/Tracing-Boundary-in-D-Image-Using-Moore-Neighborho
 	/// </summary>
 	/// <param name="image">The image.</param>
@@ -32,7 +48,7 @@ public:
 	/// <summary>
 	/// Generates the boundary image.
 	/// </summary>
-	/// <param name="image">The image.</param>
+	/// <param name="image">Image with same size as the original image and filled with only zeros</param>
 	/// <param name="contourPoints">The contour points.</param>
 	static void generateBoundaryImage(cv::Mat& image, const std::vector<std::vector<cv::Point>>& contourPoints);
 
