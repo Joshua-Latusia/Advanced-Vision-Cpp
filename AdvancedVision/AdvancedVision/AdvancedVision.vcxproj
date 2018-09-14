@@ -134,19 +134,23 @@
   <ItemGroup>
     <ClInclude Include="AppStart.h" />
     <ClInclude Include="avansvisionlib.h" />
+    <ClInclude Include="BendingEnergy.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ImageConverter.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="MooreBoundaryTracer.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="TestClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppStart.cpp" />
     <ClCompile Include="avansvisionlib.cpp" />
+    <ClCompile Include="BendingEnergy.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ImageConverter.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="MooreBoundaryTracer.cpp" />
+    <ClCompile Include="TestClass.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AdvancedVision.rc" />
