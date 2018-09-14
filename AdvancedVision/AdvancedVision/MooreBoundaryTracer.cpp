@@ -94,6 +94,14 @@ void MooreBoundaryTracer::getBackTrackPixel(const Mat & image, Point& currentPix
 
 // https://www.codeproject.com/Articles/1105045/Tracing-Boundary-in-D-Image-Using-Moore-Neighborho
 // https://github.com/TarasMartynyuk/Boundary-Tracing-Moore-Neighbours
+/// <summary>
+/// Gets the contours.
+/// </summary>
+/// <param name="image">The image.</param>
+/// <param name="contourVecVec">The contour vec vec.</param>
+/// <param name="threshAreaMin">The thresh area minimum.</param>
+/// <param name="threshAreaMax">The thresh area maximum.</param>
+/// <returns></returns>
 int MooreBoundaryTracer::getContours(const Mat& image, OUT std::vector<std::vector<Point>>& contourVecVec, int threshAreaMin, int threshAreaMax)
 {
 	Mat blobImage;
@@ -101,7 +109,8 @@ int MooreBoundaryTracer::getContours(const Mat& image, OUT std::vector<std::vect
 	vector<Point2d *> posVec;
 	vector<int> areaVec;
 
-	labelBLOBsInfo(image, blobImage, firstPixels, posVec, areaVec, 10);
+	// Get first pixels of all blobs
+	labelBLOBsInfo(image, blobImage, firstPixels, posVec, areaVec, threshAreaMin, threshAreaMax);
 
 	// looping through the pixels
 	// Note in point 2d x and y are switched
