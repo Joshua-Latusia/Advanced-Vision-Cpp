@@ -3,29 +3,23 @@
 #include <opencv2/videoio.hpp>
 
 #define WEBCAM 0
+#define EXTERNAL_CAM 1
 
 class Camera
 {
 public:
-	Camera();
+	Camera(int cameraId = 0);
 	~Camera();
 	
 	/// <summary>
 	/// Captures the image.
 	/// </summary>
-	void captureImage();
+	static void captureImage();
 
 	/// <summary>
 	/// Displays the image
 	/// </summary>
 	void displayImage() const;
 
-
-	/// <summary>
-	/// The most recent captured image
-	/// </summary>
-	cv::Mat capturedImage;
-	
-	cv::VideoCapture webCamCaputure;
 };
 

@@ -90,11 +90,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Avans OpenCV\OpenCV\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\opencv\build\x64\vc14\lib;C:\Program Files (x86)\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world343d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Avans OpenCV\OpenCV\build\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_world330d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
@@ -135,6 +135,7 @@
     <ClInclude Include="AppStart.h" />
     <ClInclude Include="avansvisionlib.h" />
     <ClInclude Include="BendingEnergy.h" />
+    <ClInclude Include="BoundingBoxer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ImageConverter.h" />
     <ClInclude Include="ImageLoader.h" />
@@ -146,6 +147,7 @@
     <ClCompile Include="AppStart.cpp" />
     <ClCompile Include="avansvisionlib.cpp" />
     <ClCompile Include="BendingEnergy.cpp" />
+    <ClCompile Include="BoundingBoxer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ImageConverter.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
