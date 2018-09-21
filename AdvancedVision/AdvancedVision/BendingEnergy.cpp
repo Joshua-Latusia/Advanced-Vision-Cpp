@@ -27,13 +27,13 @@ std::vector<std::vector<int>> BendingEnergy::getChainCode(const cv::Mat& image)
 		cvStartReadSeq(reinterpret_cast<CvSeq*>(chain), &reader, 0);
 
 		// Constructing single chaincode of one contour
-		//printf("\n--------------------chain\n"); // Debugging
+		printf("\n--------------------chain\n"); // Debugging
 		std::vector<int> chainCode;
 		for (i = 0; i<total; i++)
 		{
 			char code;
 			CV_READ_SEQ_ELEM(code, reader);
-			//printf("%d", code); // Debugging
+			printf("%d", code); // Debugging
 			chainCode.push_back(int(code));
 		}
 		chainCodes.push_back(chainCode);
