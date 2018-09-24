@@ -1,15 +1,24 @@
 #include "AppStart.h"
 #include <iostream>
 #include "Camera.h"
+#include <opencv2/highgui/highgui.hpp>
 #include "TestClass.h"
-
-#define WEBCAM 0
 
 int main()
 {
-	
-	TestClass::testChainCode();
+	/*Camera cam(EXTERNAL_CAM);
+	while(1)
+	{
+		cam.captureImage();
+		cam.displayImage();
+		cv::waitKey();
+	}*/
+
+	//TestClass::testChainCode();
+	TestClass::TestBoundingBoxes();
 	AppStart::waitKey();
+
+
 
 }
 

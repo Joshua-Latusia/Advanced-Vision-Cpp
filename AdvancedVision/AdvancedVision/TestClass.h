@@ -14,5 +14,10 @@ public:
 	/// Tests the chain code functions for the monsters and co picture.
 	/// </summary>
 	static void testChainCode();
+	
+	/// <summary>
+	/// Tests the bounding boxes.
+	/// </summary>
+	static void TestBoundingBoxes();
 };
 

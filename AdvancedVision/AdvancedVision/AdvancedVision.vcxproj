@@ -137,6 +137,7 @@
     <ClInclude Include="BendingEnergy.h" />
     <ClInclude Include="BoundingBoxer.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="FileIO.h" />
     <ClInclude Include="ImageConverter.h" />
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="MooreBoundaryTracer.h" />
@@ -149,6 +150,7 @@
     <ClCompile Include="BendingEnergy.cpp" />
     <ClCompile Include="BoundingBoxer.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="FileIO.cpp" />
     <ClCompile Include="ImageConverter.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="MooreBoundaryTracer.cpp" />
@@ -159,10 +161,15 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\basisfiguren.jpg" />
+    <Image Include="Res\bladeren.jpg" />
+    <Image Include="Res\blokjes.jpg" />
     <Image Include="Res\bolenpijl.jpg" />
     <Image Include="Res\monsters.jpg" />
+    <Image Include="Res\rummikub.bmp" />
     <Image Include="Res\rummikub.JPG" />
     <Image Include="Res\rummikub0.jpg" />
+    <Image Include="Res\rummikubbin.bmp" />
+    <Image Include="Res\rummikubbw.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -52,3 +52,5 @@ AdvancedVision/AdvancedVision/Debug/
 *.db-wal
 
 *.db-shm
+
+AdvancedVision/AdvancedVision/Res/rummikubbin/

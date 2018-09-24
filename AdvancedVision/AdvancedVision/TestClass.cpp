@@ -5,6 +5,7 @@
 #include <opencv2/imgproc.hpp>
 #include "ImageLoader.h"
 #include "BendingEnergy.h"
+#include "BoundingBoxer.h"
 
 
 TestClass::TestClass()
@@ -101,5 +102,48 @@ void TestClass::testChainCode()
 
 		cv::waitKey(0);
 
+	}
+}
+
+void TestClass::TestBoundingBoxes()
+{
+	// Read in image and diplay it
+	Mat image;
+	std::vector<std::vector<Point>> contourVector;
+	ImageLoader::loadImageFromPath(image,
+		R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\rummikubbin.bmp)");
+	if (!image.data)
+	{
+		std::cout << "Could not open file" << std::endl;
+
+	}
+	else
+	{
+		Mat binaryImage;
+		// Convert to 16 bit
+		cvtColor(image, binaryImage, CV_BGR2GRAY);
+		binaryImage.convertTo(binaryImage, CV_16S);
+
+		// Invert the image since the source is inverted
+		threshold(binaryImage, binaryImage, 1, 1, THRESH_BINARY_INV);
+		show16SImageStretch(binaryImage, "Binary image");
+
+		// Get contours and display them :D
+		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		Mat bbsImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<Point>> contourPoints;
+		std::vector<std::vector<Point>> bbsPoints;
+		std::vector<boundingBoxStruct> boundingboxStructs;
+		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
+		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
+		BoundingBoxer::getBoundingBoxes(contourPoints, bbsPoints, boundingboxStructs);
+		BoundingBoxer::drawBoundingBoxes(contourImage, bbsImage, bbsPoints);
+		show16SImageStretch(contourImage, "Contour image");
+		show16SImageStretch(bbsImage, "Bbs image");
+
+		// Save bounding boxed images to dir.
+		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res)", "rummikubbin");
+
+		cv::waitKey(0);
 	}
 }

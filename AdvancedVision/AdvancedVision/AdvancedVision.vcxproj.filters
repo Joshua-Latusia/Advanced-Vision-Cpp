@@ -45,6 +45,9 @@
     <ClInclude Include="BoundingBoxer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppStart.cpp">
@@ -74,6 +77,9 @@
     <ClCompile Include="BoundingBoxer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileIO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AdvancedVision.rc">
@@ -94,6 +100,21 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Res\rummikub0.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\bladeren.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\blokjes.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\rummikub.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\rummikubbin.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\rummikubbw.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

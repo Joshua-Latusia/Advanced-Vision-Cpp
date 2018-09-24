@@ -1,6 +1,8 @@
 #include "BoundingBoxer.h"
-
-
+#include "FileIO.h"
+#include <windows.h>
+#include <stdio.h>
+#include <iostream>
 
 BoundingBoxer::BoundingBoxer()
 {
@@ -12,13 +14,13 @@ BoundingBoxer::~BoundingBoxer()
 }
 
 int BoundingBoxer::getBoundingBoxes(const std::vector<std::vector<cv::Point>>& contours,
-	std::vector<std::vector<cv::Point>>& bbs)
+	std::vector<std::vector<cv::Point>>& bbs, std::vector<boundingBoxStruct>& boundingBoxStructs)
 {
 	for(std::vector<cv::Point> contour: contours)
 	{
 		// Get extremes
 		boundingBoxStruct extremes = getContourExtremes(contour);
-
+		boundingBoxStructs.push_back(extremes);
 		// Construct bounding box vectpr
 		bbs.push_back(generateBoundingBox(extremes));
 	}
@@ -36,24 +38,16 @@ std::vector<cv::Point> BoundingBoxer::generateBoundingBox(boundingBoxStruct& ext
 	cv::Point rightBot = cv::Point(extremes.max.x, extremes.max.y);
 	cv::Point leftBot = cv::Point(extremes.min.x, extremes.max.y);
 
-	// left top to right top
+	// left top to right top and  right bot to left bot
 	for(int i = extremes.min.x; i < extremes.max.x; ++i)
 	{
 		points.emplace_back(i, extremes.min.y);
+		points.emplace_back(i, extremes.max.y);
 	}
-	// right top to right bot
+	// right top to right bot and left bot to right top
 	for(int i = extremes.min.y; i < extremes.max.y; ++i)
 	{
 		points.emplace_back(extremes.max.x, i);
-	}
-	// right bot to left bot
-	for (int i = extremes.max.x; i > extremes.min.x; --i)
-	{
-		points.emplace_back(i, extremes.max.y);
-	}
-	// left bot to right top
-	for (int i = extremes.max.y; i > extremes.min.y; --i)
-	{
 		points.emplace_back(extremes.min.x, i);
 	}
 
@@ -65,21 +59,21 @@ boundingBoxStruct BoundingBoxer::getContourExtremes(std::vector<cv::Point>& cont
 {
 	boundingBoxStruct boxStruct;
 
-	for (cv::Point point : contour)
+	for (const cv::Point point : contour)
 	{
-		if (boxStruct.min.x < point.x)
+		if (point.x < boxStruct.min.x)
 		{
 			boxStruct.min.x = point.x;
 		}
-		if (boxStruct.min.y < point.y)
+		if (point.y < boxStruct.min.y)
 		{ 
 			boxStruct.min.y = point.y;
 		}
-		if (boxStruct.max.x > point.x)
+		if (point.x > boxStruct.max.x)
 		{
 			boxStruct.max.x = point.x;
 		}
-		if (boxStruct.max.y > point.y)
+		if (point.y > boxStruct.max.y)
 		{
 			boxStruct.max.y = point.y;
 		}
@@ -100,4 +94,36 @@ void BoundingBoxer::drawBoundingBoxes(const cv::Mat& image, cv::Mat& outputImage
 			outputImage.at<ushort>(point) = 1;
 		}
 	}
+}
+
+bool BoundingBoxer::saveBoundingBoxImages(const cv::Mat& image,
+	const std::vector<boundingBoxStruct>& boundingBoxStructs, const std::string& path, const std::string& filename, const std::string
+	& fileExtension)
+{
+	bool savedSuccess = true;
+	const std::string dirName = path + '\\' + filename;
+
+	// Check if there is a dir with the filename as dirname, otherwise create it
+	if (!CreateDirectory(dirName.c_str(), NULL) ||
+		ERROR_ALREADY_EXISTS == GetLastError())
+	{
+		std::cout << "Failed to create directory: " << dirName << " Since it already exists "<< std::endl;
+	}
+
+	// Save indivual images to this dir
+	for(int i = 0; i < boundingBoxStructs.size(); ++i)
+	{
+		auto const boundingBoxStruct = boundingBoxStructs[i];
+		int width = boundingBoxStruct.max.x - boundingBoxStruct.min.x;
+		int heigth = boundingBoxStruct.max.y - boundingBoxStruct.min.y;
+		const cv::Mat subImage = image(cv::Rect(boundingBoxStruct.min.x, boundingBoxStruct.min.y, width, heigth));
+
+		const bool result = FileIO::saveImage(subImage, dirName, filename + '_' + std::to_string(i) , fileExtension);
+		if(!result)
+		{
+			savedSuccess = false;
+		}
+
+	}
+	return savedSuccess;
 }
