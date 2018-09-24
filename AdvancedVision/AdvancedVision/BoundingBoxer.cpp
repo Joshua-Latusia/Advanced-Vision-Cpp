@@ -37,14 +37,28 @@ std::vector<cv::Point> BoundingBoxer::generateBoundingBox(boundingBoxStruct& ext
 	cv::Point leftBot = cv::Point(extremes.min.x, extremes.max.y);
 
 	// left top to right top
-
+	for(int i = extremes.min.x; i < extremes.max.x; ++i)
+	{
+		points.emplace_back(i, extremes.min.y);
+	}
 	// right top to right bot
-
+	for(int i = extremes.min.y; i < extremes.max.y; ++i)
+	{
+		points.emplace_back(extremes.max.x, i);
+	}
 	// right bot to left bot
-
+	for (int i = extremes.max.x; i > extremes.min.x; --i)
+	{
+		points.emplace_back(i, extremes.max.y);
+	}
 	// left bot to right top
+	for (int i = extremes.max.y; i > extremes.min.y; --i)
+	{
+		points.emplace_back(extremes.min.x, i);
+	}
 
 	// generate and return box
+	return points;
 }
 
 boundingBoxStruct BoundingBoxer::getContourExtremes(std::vector<cv::Point>& contour)

@@ -28,14 +28,14 @@ public:
 	/// </summary>
 	/// <param name="extremes">The extremes.</param>
 	/// <returns>All points in a bounding box from top left clockwise</returns>
-	std::vector<cv::Point> generateBoundingBox(boundingBoxStruct& extremes);
+	static std::vector<cv::Point> generateBoundingBox(boundingBoxStruct& extremes);
 
 	/// <summary>
 	/// Gets the boundary extremes.
 	/// </summary>
 	/// <param name="boundingBox">The bounding box.</param>
 	/// <returns>The most extreme outer points in order: Top, Right, Down, Left</returns>
-	boundingBoxStruct getContourExtremes(std::vector<cv::Point>& boundingBox);
+	static boundingBoxStruct getContourExtremes(std::vector<cv::Point>& contour);
 
 	/// <summary>
 	/// Draws the bounding boxes in the image.
@@ -43,6 +43,6 @@ public:
 	/// <param name="image">The image.</param>
 	/// <param name="outputImage">The output image.</param>
 	/// <param name="bbs">The BBS.</param>
-	void drawBoundingBoxes(const cv::Mat& image, cv::Mat& outputImage, std::vector<std::vector<cv::Point>>& bbs);
+	static void drawBoundingBoxes(const cv::Mat& image, cv::Mat& outputImage, std::vector<std::vector<cv::Point>>& bbs);
 };
 
