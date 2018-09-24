@@ -6,6 +6,7 @@
 #include "ImageLoader.h"
 #include "BendingEnergy.h"
 #include "BoundingBoxer.h"
+#include "BoundaryFill.h"
 
 
 TestClass::TestClass()
@@ -105,7 +106,7 @@ void TestClass::testChainCode()
 	}
 }
 
-void TestClass::TestBoundingBoxes()
+void TestClass::testBoundingBoxes()
 {
 	// Read in image and diplay it
 	Mat image;
@@ -143,6 +144,46 @@ void TestClass::TestBoundingBoxes()
 
 		// Save bounding boxed images to dir.
 		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res)", "rummikubbin");
+
+		cv::waitKey(0);
+	}
+}
+
+void TestClass::testBoundaryFill()
+{
+	// Read in image and diplay it
+	Mat image;
+	std::vector<std::vector<Point>> contourVector;
+	ImageLoader::loadImageFromPath(image,
+		R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\rummikubbin.bmp)");
+	if (!image.data)
+	{
+		std::cout << "Could not open file" << std::endl;
+
+	}
+	else
+	{
+		Mat binaryImage;
+		// Convert to 16 bit
+		cvtColor(image, binaryImage, CV_BGR2GRAY);
+		binaryImage.convertTo(binaryImage, CV_16S);
+
+		// Invert the image since the source is inverted
+		threshold(binaryImage, binaryImage, 1, 1, THRESH_BINARY_INV);
+		show16SImageStretch(binaryImage, "Binary image");
+
+		// Get contours and display them :D
+		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<Point>> contourPoints;
+		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
+		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
+		show16SImageStretch(contourImage, "Contour image");
+
+		// Test boundary fill
+		std::vector<Point> regionPixels;
+		BoundaryFill::getEnclosedPixels(binaryImage, contourPoints[0], regionPixels);
+
+		// Save bounding boxed images to dir.
 
 		cv::waitKey(0);
 	}

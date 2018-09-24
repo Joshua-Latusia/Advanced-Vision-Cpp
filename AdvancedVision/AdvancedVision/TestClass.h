@@ -18,6 +18,11 @@ public:
 	/// <summary>
 	/// Tests the bounding boxes.
 	/// </summary>
-	static void TestBoundingBoxes();
+	static void testBoundingBoxes();
+	
+	/// <summary>
+	/// Tests the boundary fill.
+	/// </summary>
+	static void testBoundaryFill();
 };
 

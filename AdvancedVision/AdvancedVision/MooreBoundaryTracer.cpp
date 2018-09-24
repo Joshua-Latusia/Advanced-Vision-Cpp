@@ -174,15 +174,16 @@ void MooreBoundaryTracer::getNextClockwiseBoundaryPoint(const Mat neighbours, Po
 	}
 }
 
+
 void MooreBoundaryTracer::generateBoundaryImage(Mat& image,
-	const std::vector<std::vector<Point>>& contourPoints)
+	const std::vector<std::vector<Point>>& contourPoints, const int pixelVal)
 {
 	// set points to a value
 	for(auto const& blob: contourPoints)
 	{
 		for(auto const& point: blob)
 		{
-			image.at<ushort>(point) = 1;
+			image.at<ushort>(point) = pixelVal;
 		}
 	}
 }

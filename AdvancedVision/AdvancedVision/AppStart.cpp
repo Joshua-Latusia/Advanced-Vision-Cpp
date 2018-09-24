@@ -15,7 +15,9 @@ int main()
 	}*/
 
 	//TestClass::testChainCode();
-	TestClass::TestBoundingBoxes();
+	//TestClass::TestBoundingBoxes();
+	TestClass::testBoundaryFill();
+	
 	AppStart::waitKey();
 
 

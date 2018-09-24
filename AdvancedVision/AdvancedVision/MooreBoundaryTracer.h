@@ -50,7 +50,8 @@ public:
 	/// </summary>
 	/// <param name="image">Image with same size as the original image and filled with only zeros</param>
 	/// <param name="contourPoints">The contour points.</param>
-	static void generateBoundaryImage(cv::Mat& image, const std::vector<std::vector<cv::Point>>& contourPoints);
+	/// <param name="pixelVal">The pixel value the contourspix get set to.</param>
+	static void generateBoundaryImage(cv::Mat& image, const std::vector<std::vector<cv::Point>>& contourPoints, const int pixelVal = 1);
 
 	/// <summary>
 	/// Prints the image to console.
