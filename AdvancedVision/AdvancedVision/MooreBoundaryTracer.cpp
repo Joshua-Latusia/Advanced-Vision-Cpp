@@ -188,6 +188,7 @@ void MooreBoundaryTracer::generateBoundaryImage(Mat& image,
 	}
 }
 
+
 void MooreBoundaryTracer::printImageToConsole(const Mat image)
 {
 	for (int i = 0; i < image.rows; ++i)
@@ -195,11 +196,13 @@ void MooreBoundaryTracer::printImageToConsole(const Mat image)
 		for (int j = 0; j < image.cols; ++j)
 		{
 			const char *c = int(image.at<ushort>(i, j)) == 0 ? "0" : "1";
-			std::cout << *c ;
+			std::cout << *c;
 		}
-		std::cout << " Row:" << i <<"\n";
+		std::cout << " Row:" << i << "\n";
 	}
 }
+
+
 
 int MooreBoundaryTracer::getOffSetIndex(const Point& offset)
 {

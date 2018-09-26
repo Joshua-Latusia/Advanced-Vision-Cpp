@@ -24,5 +24,7 @@ public:
 	/// Tests the boundary fill.
 	/// </summary>
 	static void testBoundaryFill();
+
+
 };
 
