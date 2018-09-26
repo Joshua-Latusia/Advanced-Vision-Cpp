@@ -25,7 +25,7 @@ void TestClass::testBoundaryPoints()
 	Mat image, greyImage, binaryImage;
 	std::vector<std::vector<Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
-		R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\monsters.jpg)");
+		R"(Res\monsters.jpg)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -62,7 +62,7 @@ void TestClass::testChainCode()
 	Mat image, greyImage, binaryImage;
 	std::vector<std::vector<Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
-		R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\monsters.jpg)");
+		R"(Res\monsters.jpg)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -112,7 +112,7 @@ void TestClass::testBoundingBoxes()
 	Mat image;
 	std::vector<std::vector<Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
-		R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\rummikubbin.bmp)");
+		R"(Res\rummikubbin.bmp)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -143,7 +143,7 @@ void TestClass::testBoundingBoxes()
 		show16SImageStretch(bbsImage, "Bbs image");
 
 		// Save bounding boxed images to dir.
-		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res)", "rummikubbin");
+		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "rummikubbin");
 
 		cv::waitKey(0);
 	}
@@ -155,7 +155,7 @@ void TestClass::testBoundaryFill()
 	Mat image;
 	std::vector<std::vector<Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
-		R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\AdvancedVision\Res\rummikubbin.bmp)");
+		R"(Res\rummikubbin.bmp)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
