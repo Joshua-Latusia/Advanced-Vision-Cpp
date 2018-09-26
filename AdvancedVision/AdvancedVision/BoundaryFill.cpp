@@ -6,7 +6,7 @@
 
 #define BORDER_PIXEL 100
 #define DOUBLE_BOUNDARY_PIXEL 101
-#define EMPTY_PIXEL -1
+#define EMPTY_PIXEL '-1'
 #define FIRST_PIXEL 9
 #define CURRENT_PIXEL 4
 #define LEFT_PARENT 0
@@ -35,9 +35,9 @@ BoundaryFill::~BoundaryFill()
 int BoundaryFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels)
 {
 	// Create boundary image first where boundary is value 100 and the rest is -1
-	cv::Mat boundaryImg = cv::Mat(image.rows, image.cols, image.type(),cv::Scalar(0));
+	cv::Mat boundaryImg = cv::Mat(image.rows, image.cols, image.type(),cv::Scalar(EMPTY_PIXEL));
 	const std::vector<std::vector<cv::Point>> contourVecVec = { boundaryVec };
-	MooreBoundaryTracer::generateBoundaryImage(boundaryImg, contourVecVec, 100);
+	MooreBoundaryTracer::generateBoundaryImage(boundaryImg, contourVecVec, BORDER_PIXEL);
 
 	show16SImageStretch(boundaryImg, "TestBoundaryImg"); // TODO remove 
 
@@ -47,9 +47,9 @@ int BoundaryFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::
 	generateDoubleBoundary(boundaryImg, closeBoundaryImg, boundaryVec, closeVec);
 	show16SImageStretch(closeBoundaryImg, "Close Boundary"); // TODO remove 
 
-	MooreBoundaryTracer::printImageToConsole(boundaryImg(cv::Rect(420, 20, 100, 50)));
+	//MooreBoundaryTracer::printImageToConsole(boundaryImg(cv::Rect(420, 20, 100, 50)));
 	std::cout << std::endl << std::endl;
-	MooreBoundaryTracer::printImageToConsole(closeBoundaryImg(cv::Rect(420, 20, 100, 50)));
+	//MooreBoundaryTracer::printImageToConsole(closeBoundaryImg(cv::Rect(420, 20, 100, 50)));
 
 	// Get first pixel
 
@@ -128,6 +128,7 @@ void BoundaryFill::fillImageFourConnected(const cv::Mat & image, const cv::Point
 		lastVisitedPixels.clear();
 		isNeighbourSet = false;
 	}
+
 	BoundaryFill::cleanFilledImage(filledImage);
 
 	show16SImageStretch(filledImage, "filled border");
