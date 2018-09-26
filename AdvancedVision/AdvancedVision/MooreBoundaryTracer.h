@@ -59,6 +59,7 @@ public:
 	/// <param name="image">The image.</param>
 	static void printImageToConsole(const cv::Mat image);
 
+
 private:
 	
 	/// <summary>

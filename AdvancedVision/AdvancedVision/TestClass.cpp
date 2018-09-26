@@ -155,7 +155,7 @@ void TestClass::testBoundaryFill()
 	Mat image;
 	std::vector<std::vector<Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
-		R"(Res\rummikubbin.bmp)");
+		R"(Res\testImg.png)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -179,12 +179,15 @@ void TestClass::testBoundaryFill()
 		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
 		show16SImageStretch(contourImage, "Contour image");
 
-		// Test boundary fill
 		std::vector<Point> regionPixels;
 		BoundaryFill::getEnclosedPixels(binaryImage, contourPoints[0], regionPixels);
 
-		// Save bounding boxed images to dir.
-
+		// Test boundary fill
+		
+		
 		cv::waitKey(0);
 	}
 }
+
+
+

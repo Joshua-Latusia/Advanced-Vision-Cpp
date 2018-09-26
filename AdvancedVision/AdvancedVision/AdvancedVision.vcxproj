@@ -172,6 +172,7 @@
     <Image Include="Res\rummikub0.jpg" />
     <Image Include="Res\rummikubbin.bmp" />
     <Image Include="Res\rummikubbw.bmp" />
+    <Image Include="Res\testimg.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
