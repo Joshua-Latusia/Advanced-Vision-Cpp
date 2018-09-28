@@ -48,7 +48,7 @@
     <ClInclude Include="FileIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoundaryFill.h">
+    <ClInclude Include="FloodFill.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,7 +83,7 @@
     <ClCompile Include="FileIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BoundaryFill.cpp">
+    <ClCompile Include="FloodFill.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

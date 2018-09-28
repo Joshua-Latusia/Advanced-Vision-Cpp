@@ -195,8 +195,18 @@ void MooreBoundaryTracer::printImageToConsole(const Mat image)
 	{
 		for (int j = 0; j < image.cols; ++j)
 		{
-			const char *c = int(image.at<ushort>(i, j)) == 0 ? "0" : "1";
-			std::cout << *c;
+			//const char *c = int(image.at<ushort>(i, j)) == 0 ? "0" : "1";
+
+			ushort c = image.at<ushort>(i, j);
+			if(c == 100)
+				std::cout << '1';
+			else if(c == 101)
+				std::cout << '2';
+			else if(c == -1)
+				std::cout << '0';
+			else
+				std::cout << '0';
+			
 		}
 		std::cout << " Row:" << i << "\n";
 	}

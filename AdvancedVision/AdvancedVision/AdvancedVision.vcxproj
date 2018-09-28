@@ -135,7 +135,7 @@
     <ClInclude Include="AppStart.h" />
     <ClInclude Include="avansvisionlib.h" />
     <ClInclude Include="BendingEnergy.h" />
-    <ClInclude Include="BoundaryFill.h" />
+    <ClInclude Include="FloodFill.h" />
     <ClInclude Include="BoundingBoxer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FileIO.h" />
@@ -149,7 +149,7 @@
     <ClCompile Include="AppStart.cpp" />
     <ClCompile Include="avansvisionlib.cpp" />
     <ClCompile Include="BendingEnergy.cpp" />
-    <ClCompile Include="BoundaryFill.cpp" />
+    <ClCompile Include="FloodFill.cpp" />
     <ClCompile Include="BoundingBoxer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FileIO.cpp" />
