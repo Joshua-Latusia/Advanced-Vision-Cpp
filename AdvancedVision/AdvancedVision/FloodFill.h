@@ -7,12 +7,6 @@
 class FloodFill
 {
 public:
-
-
-
-
-
-
 	FloodFill();
 	~FloodFill();
 
@@ -38,9 +32,8 @@ public:
 	/// </summary>
 	/// <param name="image">The image.</param>
 	/// <param name="firstPixel">The first pixel.</param>
-	static void fillImageFourConnected(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec);
+	static void fillImageEightConnected(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec);
 
-	static void animateFloodFill();
 
 	/// <summary>
 	/// Cleans the filled image.

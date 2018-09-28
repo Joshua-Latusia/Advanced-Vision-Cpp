@@ -61,16 +61,12 @@ int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Poi
 	std::vector<cv::Point> closeVec;
 	generateDoubleBoundary(boundaryImg, closeBoundaryImg, boundaryVec, closeVec);
 	show16SImageStretch(closeBoundaryImg, "Closed Boundary"); // TODO remove 
-
-	//MooreBoundaryTracer::printImageToConsole(boundaryImg(cv::Rect(420, 20, 100, 50)));
 	std::cout << std::endl << std::endl;
-	//MooreBoundaryTracer::printImageToConsole(closeBoundaryImg);
 
-	// Get first pixel
 	cv::waitKey(0);
-	//MooreBoundaryTracer::printImageToConsole(closeBoundaryImg);
 
-	FloodFill::fillImageFourConnected(closeBoundaryImg, boundaryVec);
+
+	FloodFill::fillImageEightConnected(closeBoundaryImg, boundaryVec);
 	
 
 
@@ -102,13 +98,11 @@ const std::vector<cv::Point> bottomPoints
 			}
 
 		}
+		// if the first pixel is not found move to the next pixel in the boundary
 		int nextBoundaryPoint = (std::find(boundaryVec.begin(), boundaryVec.end(), firstBoundaryPoint) - boundaryVec.begin()) +1;
 		firstBoundaryPoint = boundaryVec[nextBoundaryPoint];
 		
 	}
-
-
-	
 }
 
 
@@ -130,9 +124,10 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 		// Get direction between previous and current pixel 
 		const cv::Point direction = boundaryVec[i] - boundaryVec[i - 1];
 
-
-		
+		// Previous doubleBoundaryVec item + direction => current closeBoundaryPoint item
 		cv::Point closeBoundaryPoint = doubleBoundaryVec[i - 1] + direction;
+
+		// check if the direction is going up or down.
 		if (direction.x == 0 && direction.y == 1)
 		{
 			closeBoundaryPoint = boundaryVec[i - 1] + cv::Point(1,direction.y);
@@ -144,10 +139,10 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 			doubleBoundaryVec.push_back(closeBoundaryPoint);
 		}
 		else
+		{
 			doubleBoundaryVec.push_back(closeBoundaryPoint);
+		}
 		
-
-		// Previous doubleBoundaryVec item + direction => current doubleBoundaryVec item
 		
 
 		// Only change pixel if its not a border
@@ -160,30 +155,30 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 	doubleBoundaryVec.push_back(boundaryVec.front() + cv::Point(-1, 0));
 }
 
-void FloodFill::fillImageFourConnected(const cv::Mat & image, const std::vector<cv::Point>& boundaryVec)
+void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector<cv::Point>& boundaryVec)
 {
 	vector<Point> pixelsToCheck;
 	vector<Point> lastVisitedPixels;
-	cv::waitKey(0);
+	//calculates the firstpixel inside of the boundary
 	Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
-	//Point firstPixel = Point(123, 96);
-	//int stepIndex = 1;
 	cv::Mat filledImage = image;
 
 	bool isNeighbourSet = false;
 
-	filledImage.at<ushort>(firstPixel) = 0;
+	//add the first pixel to the pixelsToCheck to start the algorithm
+	filledImage.at<ushort>(firstPixel) = FLOODFILL_PIXEL;
 	pixelsToCheck.push_back(firstPixel);
 
 	for (;;)
 	{
+		//check each visited pixel for neighbours
 		for (int visitedPixel = 0; visitedPixel < pixelsToCheck.size(); visitedPixel++)
 		{
 			for (int direction = 0; direction < neighbour_coordinates_eight_connected.size(); direction++)
 			{
+				// pixel to check is the pixel from the lastvisitedpixellist + one of the eight directins
 				Point pixelToCheck = pixelsToCheck[visitedPixel] + neighbour_coordinates_eight_connected[direction];
 
-				ushort kek = filledImage.at<ushort>(pixelToCheck);
 				if (filledImage.at<ushort>(pixelToCheck) == EMPTY_PIXEL)
 				{
 					isNeighbourSet = true;
@@ -195,16 +190,15 @@ void FloodFill::fillImageFourConnected(const cv::Mat & image, const std::vector<
 		if (!isNeighbourSet)
 			break;
 
-		//stepIndex++;
 		pixelsToCheck = lastVisitedPixels;
 		lastVisitedPixels.clear();
 		isNeighbourSet = false;
 		show16SImageStretch(filledImage, "filled border");
+		//used to animate the fill image.
 		waitKey(1) & 0XFF;
 	}
-
+	//show the invertedimage 
 	FloodFill::cleanFilledImage(filledImage);
-
 	show16SImageStretch(filledImage, "filled border");
 }
 
@@ -215,14 +209,11 @@ void FloodFill::cleanFilledImage(cv::Mat & img)
 	{
 		for (int x = 0; x < img.rows; x++)
 		{
-			if (img.at<ushort>(Point(x, y)) == EMPTY_PIXEL)
-				img.at<ushort>(Point(x, y)) = 0;
-			else if (img.at<ushort>(Point(x, y)) == DOUBLE_BOUNDARY_PIXEL)
-				img.at<ushort>(Point(x, y)) = 0;
-			else if (img.at<ushort>(Point(x, y)) == BORDER_PIXEL)
+			//change all the border and floodfill pixels to a 1
+			if (img.at<ushort>(Point(x, y)) == BORDER_PIXEL || img.at<ushort>(Point(x, y)) == FLOODFILL_PIXEL)
 				img.at<ushort>(Point(x, y)) = 1;
-			else if (img.at<ushort>(Point(x, y)) == FLOODFILL_PIXEL)
-				img.at<ushort>(Point(x, y)) = 1;
+			else
+				img.at<ushort>(Point(x, y)) = 0;
 		}
 	}
 }
