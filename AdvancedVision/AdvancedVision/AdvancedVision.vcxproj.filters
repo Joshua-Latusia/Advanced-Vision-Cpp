@@ -126,5 +126,14 @@
     <Image Include="Res\testimg.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Res\harten.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\mix.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\ruiten.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
