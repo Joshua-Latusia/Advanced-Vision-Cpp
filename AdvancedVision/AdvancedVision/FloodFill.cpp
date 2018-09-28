@@ -54,22 +54,13 @@ int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Poi
 	const std::vector<std::vector<cv::Point>> contourVecVec = { boundaryVec };
 	MooreBoundaryTracer::generateBoundaryImage(boundaryImg, contourVecVec, BORDER_PIXEL);
 
-	show16SImageStretch(boundaryImg, "TestBoundaryImg"); // TODO remove 
-
 	// Generate Close boundary 
 	cv::Mat closeBoundaryImg;
 	std::vector<cv::Point> closeVec;
 	generateDoubleBoundary(boundaryImg, closeBoundaryImg, boundaryVec, closeVec);
-	show16SImageStretch(closeBoundaryImg, "Closed Boundary"); // TODO remove 
-	std::cout << std::endl << std::endl;
 
-	cv::waitKey(0);
-
-	FloodFill::fillImageEightConnected(closeBoundaryImg, boundaryVec, regionPixels);
-	
-
-
-	return 1;
+	fillImageEightConnected(closeBoundaryImg, boundaryVec, regionPixels);
+	return regionPixels.size();
 }
 
 cv::Point FloodFill::calculateFirstPixel(const cv::Mat& img, const std::vector<cv::Point>& boundaryVec)
@@ -81,7 +72,6 @@ const std::vector<cv::Point> bottomPoints
 		cv::Point{ -1 ,1 } 	// bottom left
 	};
 	cv::Point firstBoundaryPoint = boundaryVec[0];
-	cv::Point firstPoint;
 	bool found = false;
 
 	while (!found)
@@ -91,17 +81,18 @@ const std::vector<cv::Point> bottomPoints
 			ushort kenk = img.at<ushort>(firstBoundaryPoint + bottomPoints[i]);
 			if (img.at<ushort>(firstBoundaryPoint + bottomPoints[i]) == EMPTY_PIXEL)
 			{
-				firstPoint = firstBoundaryPoint + bottomPoints[i];
+				cv::Point firstPoint = firstBoundaryPoint + bottomPoints[i];
 				found = true;
 				return firstPoint;
 			}
 
 		}
 		// if the first pixel is not found move to the next pixel in the boundary
-		int nextBoundaryPoint = (std::find(boundaryVec.begin(), boundaryVec.end(), firstBoundaryPoint) - boundaryVec.begin()) +1;
+		const int nextBoundaryPoint = (std::find(boundaryVec.begin(), boundaryVec.end(), firstBoundaryPoint) - boundaryVec.begin()) +1;
 		firstBoundaryPoint = boundaryVec[nextBoundaryPoint];
 		
 	}
+	return Point(-1,-1);
 }
 
 
@@ -159,7 +150,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 	vector<Point> pixelsToCheck;
 	vector<Point> lastVisitedPixels;
 	//calculates the firstpixel inside of the boundary
-	Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
+	const Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
 	cv::Mat filledImage = image;
 
 	bool isNeighbourSet = false;
@@ -176,7 +167,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 			for (int direction = 0; direction < neighbour_coordinates_eight_connected.size(); direction++)
 			{
 				// pixel to check is the pixel from the lastvisitedpixellist + one of the eight directins
-				Point pixelToCheck = pixelsToCheck[visitedPixel] + neighbour_coordinates_eight_connected[direction];
+				const Point pixelToCheck = pixelsToCheck[visitedPixel] + neighbour_coordinates_eight_connected[direction];
 
 				if (filledImage.at<ushort>(pixelToCheck) == EMPTY_PIXEL)
 				{
@@ -198,7 +189,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 		waitKey(1) & 0XFF;
 	}
 	//show the invertedimage 
-	FloodFill::cleanFilledImage(filledImage);
+	cleanFilledImage(filledImage);
 	show16SImageStretch(filledImage, "filled border");
 }
 
