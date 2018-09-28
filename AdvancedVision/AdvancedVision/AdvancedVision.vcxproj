@@ -166,7 +166,10 @@
     <Image Include="Res\bladeren.jpg" />
     <Image Include="Res\blokjes.jpg" />
     <Image Include="Res\bolenpijl.jpg" />
+    <Image Include="Res\harten.png" />
+    <Image Include="Res\mix.png" />
     <Image Include="Res\monsters.jpg" />
+    <Image Include="Res\ruiten.png" />
     <Image Include="Res\rummikub.bmp" />
     <Image Include="Res\rummikub.JPG" />
     <Image Include="Res\rummikub0.jpg" />
