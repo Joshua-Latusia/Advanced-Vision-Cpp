@@ -32,7 +32,7 @@ public:
 	/// </summary>
 	/// <param name="image">The image.</param>
 	/// <param name="firstPixel">The first pixel.</param>
-	static void fillImageEightConnected(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec);
+	static void fillImageEightConnected(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels);
 
 
 	/// <summary>

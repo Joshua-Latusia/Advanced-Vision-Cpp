@@ -65,8 +65,7 @@ int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Poi
 
 	cv::waitKey(0);
 
-
-	FloodFill::fillImageEightConnected(closeBoundaryImg, boundaryVec);
+	FloodFill::fillImageEightConnected(closeBoundaryImg, boundaryVec, regionPixels);
 	
 
 
@@ -155,7 +154,7 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 	doubleBoundaryVec.push_back(boundaryVec.front() + cv::Point(-1, 0));
 }
 
-void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector<cv::Point>& boundaryVec)
+void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels)
 {
 	vector<Point> pixelsToCheck;
 	vector<Point> lastVisitedPixels;
@@ -182,6 +181,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 				if (filledImage.at<ushort>(pixelToCheck) == EMPTY_PIXEL)
 				{
 					isNeighbourSet = true;
+					regionPixels.push_back(pixelToCheck);
 					filledImage.at<ushort>(pixelToCheck) = FLOODFILL_PIXEL;
 					lastVisitedPixels.push_back(pixelToCheck);
 				}
