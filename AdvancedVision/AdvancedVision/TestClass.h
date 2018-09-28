@@ -21,6 +21,11 @@ public:
 	static void testBoundingBoxes();
 	
 	/// <summary>
+	/// Tests the bounding boxes with own trainingset.
+	/// </summary>
+	static void testBoundingBoxesTraining();
+
+	/// <summary>
 	/// Tests the boundary fill.
 	/// </summary>
 	static void testBoundaryFill();
