@@ -6,7 +6,7 @@
 #include "ImageLoader.h"
 #include "BendingEnergy.h"
 #include "BoundingBoxer.h"
-#include "BoundaryFill.h"
+#include "FloodFill.h"
 
 
 TestClass::TestClass()
@@ -149,7 +149,7 @@ void TestClass::testBoundingBoxes()
 	}
 }
 
-void TestClass::testBoundaryFill()
+void TestClass::testFloodFill()
 {
 	// Read in image and diplay it
 	Mat image;
@@ -180,7 +180,7 @@ void TestClass::testBoundaryFill()
 		show16SImageStretch(contourImage, "Contour image");
 
 		std::vector<Point> regionPixels;
-		BoundaryFill::getEnclosedPixels(binaryImage, contourPoints[0], regionPixels);
+		FloodFill::getEnclosedPixels(binaryImage, contourPoints[0], regionPixels);
 
 		// Test boundary fill
 		
