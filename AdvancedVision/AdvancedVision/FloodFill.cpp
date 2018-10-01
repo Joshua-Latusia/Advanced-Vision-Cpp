@@ -1,8 +1,8 @@
 #include "FloodFill.h"
-#include "MooreBoundaryTracer.h"
-#include "avansvisionlib.h"
-#include <thread>         // std::this_thread::sleep_for
-#include <chrono>  
+#include "FileIO.h"
+#include <windows.h>
+#include <stdio.h>
+#include <iostream>
 
 
 // Defines for the algorithm pixel values
@@ -19,13 +19,6 @@
 #define BOTTOM_PARENT 3
 
 
-const std::vector<cv::Point> neighbour_coordinates_four_connected
-{
-	Point{ -1, 0 },		// left
-	Point{ 0, -1 }, 	// top
-	Point{ 1, 0 },		// right
-	Point{ 0, 1 },		// bottom
-};
 const std::vector<cv::Point> neighbour_coordinates_eight_connected
 {
 	cv::Point{ -1, 0 },		// left
@@ -47,7 +40,7 @@ FloodFill::~FloodFill()
 {
 }
 
-int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels)
+int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels,bool animation)
 {
 	// Create boundary image first where boundary is value 100 and the rest is -1
 	cv::Mat boundaryImg = cv::Mat(image.rows, image.cols, image.type(),cv::Scalar(EMPTY_PIXEL));
@@ -59,7 +52,7 @@ int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Poi
 	std::vector<cv::Point> closeVec;
 	generateDoubleBoundary(boundaryImg, closeBoundaryImg, boundaryVec, closeVec);
 
-	fillImageEightConnected(closeBoundaryImg, boundaryVec, regionPixels);
+	fillImageEightConnected(closeBoundaryImg, boundaryVec, regionPixels, animation);
 	return regionPixels.size();
 }
 
@@ -92,7 +85,7 @@ const std::vector<cv::Point> bottomPoints
 		firstBoundaryPoint = boundaryVec[nextBoundaryPoint];
 		
 	}
-	return Point(-1,-1);
+	return cv::Point(-1,-1);
 }
 
 
@@ -101,7 +94,7 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 	image.copyTo(doubleBoundaryImage);
 	
 	// First point of the second boundary is the first pixel of the first boundary with y = firstboundary.y -1
-	const Point firstClosePixel = boundaryVec.front() + cv::Point(0,-1);
+	const cv::Point firstClosePixel = boundaryVec.front() + cv::Point(0,-1);
 	doubleBoundaryVec.push_back(firstClosePixel);
 
 	// Go around the boundary and construct double boundary
@@ -133,8 +126,6 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 			doubleBoundaryVec.push_back(closeBoundaryPoint);
 		}
 		
-		
-
 		// Only change pixel if its not a border
 		if(image.at<ushort>(closeBoundaryPoint) != BORDER_PIXEL)
 		{
@@ -145,12 +136,12 @@ void FloodFill::generateDoubleBoundary(const cv::Mat& image, cv::Mat& doubleBoun
 	doubleBoundaryVec.push_back(boundaryVec.front() + cv::Point(-1, 0));
 }
 
-void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels)
+void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels, bool animation)
 {
-	vector<Point> pixelsToCheck;
-	vector<Point> lastVisitedPixels;
+	vector<cv::Point> pixelsToCheck;
+	vector<cv::Point> lastVisitedPixels;
 	//calculates the firstpixel inside of the boundary
-	const Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
+	const cv::Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
 	cv::Mat filledImage = image;
 
 	bool isNeighbourSet = false;
@@ -158,6 +149,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 	//add the first pixel to the pixelsToCheck to start the algorithm
 	filledImage.at<ushort>(firstPixel) = FLOODFILL_PIXEL;
 	pixelsToCheck.push_back(firstPixel);
+	int animationIndex = 0;
 
 	for (;;)
 	{
@@ -167,7 +159,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 			for (int direction = 0; direction < neighbour_coordinates_eight_connected.size(); direction++)
 			{
 				// pixel to check is the pixel from the lastvisitedpixellist + one of the eight directins
-				const Point pixelToCheck = pixelsToCheck[visitedPixel] + neighbour_coordinates_eight_connected[direction];
+				const cv::Point pixelToCheck = pixelsToCheck[visitedPixel] + neighbour_coordinates_eight_connected[direction];
 
 				if (filledImage.at<ushort>(pixelToCheck) == EMPTY_PIXEL)
 				{
@@ -184,29 +176,83 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 		pixelsToCheck = lastVisitedPixels;
 		lastVisitedPixels.clear();
 		isNeighbourSet = false;
-		show16SImageStretch(filledImage, "filled border");
+
+
 		//used to animate the fill image.
-		waitKey(1) & 0XFF;
+		if (animation)
+		{
+			animationIndex++;
+			if (animationIndex > 10)
+			{
+				show16SImageStretch(filledImage, "filled border");
+				cv::waitKey(1) & 0XFF;
+				animationIndex = 0;
+			}
+		}
 	}
-	//show the invertedimage 
-	cleanFilledImage(filledImage);
+
 	show16SImageStretch(filledImage, "filled border");
 }
 
 
-void FloodFill::cleanFilledImage(cv::Mat & img)
+bool FloodFill::saveEnclosedPixelsImages(const cv::Mat& image,
+	std::vector<std::vector<cv::Point>>& enclosedPixels, const std::string& path, const std::string& filename,
+	const std::string& fileExtension)
 {
-	for (int y = 0; y < img.cols; y++)
+	const std::string dirName = path + '\\' + filename;
+
+	// Check if there is a dir with the filename as dirname, otherwise create it
+	if (!CreateDirectory(dirName.c_str(), NULL) ||
+		ERROR_ALREADY_EXISTS == GetLastError())
 	{
-		for (int x = 0; x < img.rows; x++)
+		std::cout << "Failed to create directory: " << dirName << " Since it already exists " << std::endl;
+		return false;
+	}
+
+	// Save indivual images to this dir
+	for (int subPixels = 0; subPixels < enclosedPixels.size(); subPixels++)
+	{
+		//calculate the extremes from the contour
+		FloodFillExtremesStruct extremes; 
+		FloodFill::getExtremes(enclosedPixels[subPixels], extremes);
+
+		//create a sub image with the extreme values
+		cv::Mat subImage = cv::Mat(extremes.imageSize.height+1, extremes.imageSize.width+1 , image.type(), cv::Vec3b(255,255,255));
+		for (int i = 0; i < enclosedPixels[subPixels].size(); i++)
 		{
-			//change all the border and floodfill pixels to a 1
-			if (img.at<ushort>(Point(x, y)) == BORDER_PIXEL || img.at<ushort>(Point(x, y)) == FLOODFILL_PIXEL)
-				img.at<ushort>(Point(x, y)) = 1;
-			else
-				img.at<ushort>(Point(x, y)) = 0;
+			//correct the position from old to new image
+			cv::Point correctedPixel = enclosedPixels[subPixels][i];
+			correctedPixel.x -= (extremes.min.x);
+			correctedPixel.y -= (extremes.min.y);
+			subImage.at<cv::Vec3b>(correctedPixel) = image.at<cv::Vec3b>(enclosedPixels[subPixels][i]);
+		}
+		//save the image
+		const bool result = FileIO::saveImage(subImage, dirName, filename + '_' + std::to_string(subPixels), fileExtension);
+		if (result)
+		{
+			return true;
 		}
 	}
+	return false;
+}
+
+void FloodFill::getExtremes(std::vector<cv::Point>& enclosedPixels, FloodFillExtremesStruct& extremesStruct)
+{
+	for (int i = 0; i < enclosedPixels.size(); i++)
+	{
+		if (enclosedPixels[i].x > extremesStruct.max.x)
+			extremesStruct.max.x = enclosedPixels[i].x;
+		if(enclosedPixels[i].x < extremesStruct.min.x)
+			extremesStruct.min.x = enclosedPixels[i].x;
+
+		if (enclosedPixels[i].y > extremesStruct.max.y)
+			extremesStruct.max.y = enclosedPixels[i].y;
+		if (enclosedPixels[i].y < extremesStruct.min.y)
+			extremesStruct.min.y = enclosedPixels[i].y;
+	}
+
+	extremesStruct.imageSize.width = extremesStruct.max.x - extremesStruct.min.x;
+	extremesStruct.imageSize.height = extremesStruct.max.y - extremesStruct.min.y;
 }
 
 

@@ -1,8 +1,18 @@
 #pragma once
 #include <vector>
 #include <opencv2/core/mat.hpp>
+#include "MooreBoundaryTracer.h"
+#include "avansvisionlib.h"
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>  
 
 
+struct FloodFillExtremesStruct
+{
+	cv::Point min = cv::Point(INT_MAX, INT_MAX);
+	cv::Point max = cv::Point(0, 0);
+	cv::Rect imageSize;
+};
 
 class FloodFill
 {
@@ -17,7 +27,7 @@ public:
 	/// <param name="contourVec">The contour vec.</param>
 	/// <param name="regionPixels">The region pixels.</param>
 	/// <returns></returns>
-	static int getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels);
+	static int getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels, bool animation = false);
 
 	/// <summary>
 	/// Calculates the first pixel.
@@ -32,14 +42,14 @@ public:
 	/// </summary>
 	/// <param name="image">The image.</param>
 	/// <param name="firstPixel">The first pixel.</param>
-	static void fillImageEightConnected(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels);
+	static void fillImageEightConnected(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels, bool animation = false);
 
 
-	/// <summary>
-	/// Cleans the filled image.
-	/// </summary>
-	/// <param name="img">The img.</param>
-	static void cleanFilledImage(cv::Mat & img);
+	static bool saveEnclosedPixelsImages(const cv::Mat & image, std::vector<std::vector<cv::Point>>& enclosedPixels, const std::string & path, 
+		const std::string & filename, const std::string & fileExtension = ".jpg");
+
+
+	static void getExtremes(std::vector<cv::Point>& enclosedPixels, FloodFillExtremesStruct & extremesStruct);
 
 	/// <summary>
 	/// Generates the extra boundary around the regular boundary so FloodFill algorithm will work 8-connected.
