@@ -181,7 +181,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 		if (animation)
 		{
 			animationIndex++;
-			if (animationIndex > 5)
+			if (animationIndex > 10)
 			{
 				show16SImageStretch(filledImage, "filled border");
 				cv::waitKey(1) & 0XFF;
@@ -191,7 +191,6 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 	}
 
 	show16SImageStretch(filledImage, "filled border");
-	
 }
 
 
