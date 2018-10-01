@@ -40,6 +40,7 @@ FloodFill::~FloodFill()
 {
 }
 
+
 int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Point>& boundaryVec, std::vector<cv::Point>& regionPixels,bool animation)
 {
 	// Create boundary image first where boundary is value 100 and the rest is -1
@@ -182,7 +183,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 		if (animation)
 		{
 			animationIndex++;
-			if (animationIndex > 10)
+			if (animationIndex > 5)
 			{
 				show16SImageStretch(filledImage, "filled border");
 				cv::waitKey(1) & 0XFF;
@@ -192,6 +193,7 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 	}
 
 	show16SImageStretch(filledImage, "filled border");
+	
 }
 
 
