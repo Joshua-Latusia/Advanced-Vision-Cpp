@@ -22,8 +22,8 @@ TestClass::~TestClass()
 void TestClass::testBoundaryPoints()
 {
 	// Read in image and diplay it
-	Mat image, greyImage, binaryImage;
-	std::vector<std::vector<Point>> contourVector;
+	cv::Mat image, greyImage, binaryImage;
+	std::vector<std::vector<cv::Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
 		R"(Res\monsters.jpg)");
 	if (!image.data)
@@ -38,15 +38,15 @@ void TestClass::testBoundaryPoints()
 		greyImage.convertTo(greyImage, CV_16S);
 
 		// Threshold the number 
-		threshold(greyImage, binaryImage, 100, 1, THRESH_BINARY_INV);
+		threshold(greyImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
 
 		// Display all the images
 		show16SImageStretch(greyImage, "Grey image");
 		show16SImageStretch(binaryImage, "Binary image");
 
 		// Get contours and display them :D
-		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		std::vector<std::vector<Point>> contourPoints;
+		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<cv::Point>> contourPoints;
 		MooreBoundaryTracer::getContours(binaryImage, contourPoints, 10);
 		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
 		show16SImageStretch(contourImage, "Contour image");
@@ -59,8 +59,8 @@ void TestClass::testBoundaryPoints()
 void TestClass::testChainCode()
 {
 	// Read in image and diplay it
-	Mat image, greyImage, binaryImage;
-	std::vector<std::vector<Point>> contourVector;
+	cv::Mat image, greyImage, binaryImage;
+	std::vector<std::vector<cv::Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
 		R"(Res\monsters.jpg)");
 	if (!image.data)
@@ -75,15 +75,15 @@ void TestClass::testChainCode()
 		greyImage.convertTo(greyImage, CV_16S);
 
 		// Threshold the number 
-		threshold(greyImage, binaryImage, 100, 1, THRESH_BINARY_INV);
+		threshold(greyImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
 
 		// Display all the images
 		show16SImageStretch(greyImage, "Grey image");
 		show16SImageStretch(binaryImage, "Binary image");
 
 		// Get contours and display them :D
-		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		std::vector<std::vector<Point>> contourPoints;
+		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<cv::Point>> contourPoints;
 		MooreBoundaryTracer::getContours(binaryImage, contourPoints, 10);
 		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
 		show16SImageStretch(contourImage, "Contour image");
@@ -109,8 +109,8 @@ void TestClass::testChainCode()
 void TestClass::testBoundingBoxes()
 {
 	// Read in image and diplay it
-	Mat image;
-	std::vector<std::vector<Point>> contourVector;
+	cv::Mat image;
+	std::vector<std::vector<cv::Point>> contourVector;
 	ImageLoader::loadImageFromPath(image,
 		R"(Res\rummikubbin.bmp)");
 	if (!image.data)
@@ -120,20 +120,20 @@ void TestClass::testBoundingBoxes()
 	}
 	else
 	{
-		Mat binaryImage;
+		cv::Mat binaryImage;
 		// Convert to 16 bit
 		cvtColor(image, binaryImage, CV_BGR2GRAY);
 		binaryImage.convertTo(binaryImage, CV_16S);
 
 		// Invert the image since the source is inverted
-		threshold(binaryImage, binaryImage, 1, 1, THRESH_BINARY_INV);
+		threshold(binaryImage, binaryImage, 1, 1, cv::THRESH_BINARY_INV);
 		show16SImageStretch(binaryImage, "Binary image");
 
 		// Get contours and display them :D
-		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		Mat bbsImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		std::vector<std::vector<Point>> contourPoints;
-		std::vector<std::vector<Point>> bbsPoints;
+		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		cv::Mat bbsImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<cv::Point>> contourPoints;
+		std::vector<std::vector<cv::Point>> bbsPoints;
 		std::vector<boundingBoxStruct> boundingboxStructs;
 		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
 		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
@@ -152,10 +152,12 @@ void TestClass::testBoundingBoxes()
 void TestClass::testBoundingBoxesTraining()
 {
 	// Read in image and diplay it
-	Mat image;
-	std::vector<std::vector<Point>> contourVector;
+	cv::Mat image;
+	std::vector<std::vector<cv::Point>> contourVector;
+	/*ImageLoader::loadImageFromPath(image,
+		R"(Res\harten.png)");*/
 	ImageLoader::loadImageFromPath(image,
-		R"(Res\harten.png)");
+		R"(Res\mix2.png)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -163,20 +165,20 @@ void TestClass::testBoundingBoxesTraining()
 	}
 	else
 	{
-		Mat binaryImage;
+		cv::Mat binaryImage;
 		// Convert to 16 bit
 		cvtColor(image, binaryImage, CV_BGR2GRAY);
 		binaryImage.convertTo(binaryImage, CV_16S);
 
 		// Invert the image since the source is inverted
-		threshold(binaryImage, binaryImage, 100, 1, THRESH_BINARY_INV);
+		threshold(binaryImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
 		show16SImageStretch(binaryImage, "Binary image");
 
 		// Get contours and display them :D
-		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		Mat bbsImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		std::vector<std::vector<Point>> contourPoints;
-		std::vector<std::vector<Point>> bbsPoints;
+		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		cv::Mat bbsImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<cv::Point>> contourPoints;
+		std::vector<std::vector<cv::Point>> bbsPoints;
 		std::vector<boundingBoxStruct> boundingboxStructs;
 		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
 		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
@@ -186,7 +188,7 @@ void TestClass::testBoundingBoxesTraining()
 		show16SImageStretch(bbsImage, "Bbs image");
 
 		// Save bounding boxed images to dir.
-		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "harten");
+		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "mixed");
 
 		cv::waitKey(0);
 	}
@@ -195,10 +197,12 @@ void TestClass::testBoundingBoxesTraining()
 void TestClass::testFloodFill()
 {
 	// Read in image and diplay it
-	Mat image;
-	std::vector<std::vector<Point>> contourVector;
+	cv::Mat image;
+	std::vector<std::vector<cv::Point>> contourVector;
+	/*ImageLoader::loadImageFromPath(image,
+		R"(Res\testImg.png)");*/
 	ImageLoader::loadImageFromPath(image,
-		R"(Res\testImg.png)");
+		R"(Res\mix2.png)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -206,28 +210,38 @@ void TestClass::testFloodFill()
 	}
 	else
 	{
-		Mat binaryImage;
+		cv::Mat binaryImage;
 		// Convert to 16 bit
 		cvtColor(image, binaryImage, CV_BGR2GRAY);
 		binaryImage.convertTo(binaryImage, CV_16S);
 
 		// Invert the image since the source is inverted
-		threshold(binaryImage, binaryImage, 1, 1, THRESH_BINARY_INV);
+		//threshold(binaryImage, binaryImage, 1, 1, cv::THRESH_BINARY_INV);
+
+		threshold(binaryImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
 		show16SImageStretch(binaryImage, "Binary image");
 
 		// Get contours and display them :D
-		Mat contourImage = Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
-		std::vector<std::vector<Point>> contourPoints;
+		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<cv::Point>> contourPoints;
 		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
 		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
 		show16SImageStretch(contourImage, "Contour image");
 
-		std::vector<Point> regionPixels;
-		FloodFill::getEnclosedPixels(binaryImage, contourPoints[0], regionPixels);
+		std::vector<std::vector<cv::Point>> allBlobsRegionPixels;
 
+		for (int contours = 0; contours < contourPoints.size(); contours++)
+		{
+			std::vector<cv::Point> regionPixels;
+			FloodFill::getEnclosedPixels(binaryImage, contourPoints[contours], regionPixels, true);
+			allBlobsRegionPixels.push_back(regionPixels);
+			regionPixels.clear();
+		}
+
+		FloodFill::saveEnclosedPixelsImages(image, allBlobsRegionPixels, R"(Res)", "mixedClosedPixels");
+		//BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "harten");
 		// Test boundary fill
 		
-		cv::waitKey(0);
 	}
 }
 
