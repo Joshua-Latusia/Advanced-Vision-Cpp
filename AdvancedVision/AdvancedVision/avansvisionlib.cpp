@@ -1,7 +1,7 @@
 // avansvisionlib - Growing Visionlibrary of Avans based on OpenCV 2.4.10 
 // Goal: deep understanding of vision algorithms by means of developing own (new) algorithms.
 // 
-// Copyright Jan Oostindie, basic version 1.0 dd 8-11-2016. Contains basic functions to perform calculations on matrices/images of class Mat.
+// Copyright Jan Oostindie, basic version 1.0 dd 8-11-2016. Contains basic functions to perform calculations on cv::Matrices/images of class cv::Mat.
 // Including BLOB labeling functions
 //
 // Note: Students of Avans are free to use this library in projects and for own vision competence development. Others may ask permission to use it by means 
@@ -14,14 +14,14 @@
 
 // pre: (i < m.rows) & (j < m.cols)
 // Mat is call by reference
-void setEntry(Mat m, int i, int j, double value) {
+void setEntry(cv::Mat m, int i, int j, double value) {
 	int index = i * m.cols + j;
 	double * p = m.ptr<double>(0);
 	p[index] = value;
 } //  setEntry
 
 // pre: (i < m.rows) & (j < m.cols)
-double getEntry(Mat m, int i, int j) {
+double getEntry(cv::Mat m, int i, int j) {
 	int index = i * m.cols + j;
 	double * p = m.ptr<double>(0);
 	return *(p + index);
@@ -30,7 +30,7 @@ double getEntry(Mat m, int i, int j) {
 
 // func: calculate product of a row and column of equal length  
 // pre: (row.cols == col.rows) 
-double inproduct(Mat row, Mat col) {
+double inproduct(cv::Mat row, cv::Mat col) {
 	double * p1 = row.ptr<double>(0);
 	double * p2 = col.ptr<double>(0);
 	double sumproducts = 0;
@@ -39,7 +39,7 @@ double inproduct(Mat row, Mat col) {
 	return sumproducts;
 }  // inproduct
 
-void printMatrix(Mat m) {
+void printMatrix(cv::Mat m) {
 	for (int i = 0; i < m.rows; i++) {
 		for (int j = 0; j < m.cols; j++)
 			cout << getEntry(m, i, j) << "  ";
@@ -49,8 +49,8 @@ void printMatrix(Mat m) {
 } // printMatrix
 
 
-Mat getRow(Mat m, int rowNr) {
-	Mat result = Mat_<double>(1, m.cols);
+cv::Mat getRow(cv::Mat m, int rowNr) {
+	cv::Mat result = cv::Mat_<double>(1, m.cols);
 	double entry;
 	for (int colNr = 0; colNr < m.cols; colNr++) {
 		entry = getEntry(m, rowNr, colNr);
@@ -61,8 +61,8 @@ Mat getRow(Mat m, int rowNr) {
 	return result;
 } // getRow
 
-Mat getCol(Mat m, int colNr) {
-	Mat result = Mat_<double>(m.rows, 1);
+cv::Mat getCol(cv::Mat m, int colNr) {
+	cv::Mat result = cv::Mat_<double>(m.rows, 1);
 	double entry;
 	for (int rowNr = 0; rowNr < m.rows; rowNr++) {
 		entry = getEntry(m, rowNr, colNr);
@@ -76,9 +76,9 @@ Mat getCol(Mat m, int colNr) {
 
 
 // pre: (a.cols == b.rows)
-Mat multiply(Mat a, Mat b)
+cv::Mat multiply(cv::Mat a, cv::Mat b)
 {
-	Mat result = Mat_<double>(a.rows, b.cols);
+	cv::Mat result = cv::Mat_<double>(a.rows, b.cols);
 	double inprod;
 	for (int arow = 0; arow < a.rows; arow++) {
 		for (int bcol = 0; bcol < b.cols; bcol++) {
@@ -90,9 +90,9 @@ Mat multiply(Mat a, Mat b)
 } // multiply
 
 // pre: matrices have equal dimensions i.e. (a.cols == b.cols) & (a.rows == b.rows) 
-Mat add(Mat a, Mat b)
+cv::Mat add(cv::Mat a, cv::Mat b)
 {
-	Mat result = Mat_<double>(a.rows, a.cols);
+	cv::Mat result = cv::Mat_<double>(a.rows, a.cols);
 	double entrysum;
 	for (int row = 0; row < a.rows; row++) {
 		for (int col = 0; col < a.cols; col++) {
@@ -104,8 +104,8 @@ Mat add(Mat a, Mat b)
 } // add
 
 
-Mat transpose(Mat m) {
-	Mat result = Mat_<double>(m.cols, m.rows);
+cv::Mat transpose(cv::Mat m) {
+	cv::Mat result = cv::Mat_<double>(m.cols, m.rows);
 	for (int row = 0; row < m.rows; row++)
 	for (int col = 0; col < m.cols; col++)
 		setEntry(result, col, row, getEntry(m, row, col));
@@ -113,9 +113,9 @@ Mat transpose(Mat m) {
 } // transpose
 
 
-// func: sets all entries of a matrix to a value
+// func: sets all entries of a cv::Matrix to a value
 // pre: true
-void setValue(Mat m, double value) {
+void setValue(cv::Mat m, double value) {
 	for (int row = 0; row < m.rows; row++)
 	for (int col = 0; col < m.cols; col++)
 		setEntry(m, row, col, value);
@@ -129,9 +129,9 @@ double generateRandomValue(double min, double max) {
 } // generateRandomValue
 
 
-// func: sets all entries of a matrix to a random value in interval [min,max]
+// func: sets all entries of a cv::Matrix to a random value in interval [min,max]
 // pre: true
-void setRandomValue(Mat m, double min, double max) {
+void setRandomValue(cv::Mat m, double min, double max) {
 	srand(time(NULL));
 	for (int row = 0; row < m.rows; row++)
 	for (int col = 0; col < m.cols; col++)
@@ -144,14 +144,14 @@ void setRandomValue(Mat m, double min, double max) {
 // NB images are supposed to have 1 channel (B/W image) and depth 16 bits signed (CV_16S) 
 /********************************************************************************************/
 
-void setEntryImage(Mat m, int i, int j, _int16 value) {
+void setEntryImage(cv::Mat m, int i, int j, _int16 value) {
 	int index = i * m.cols + j;
 	_int16 * p = m.ptr<_int16>(0);
 	p[index] = value;
 } //  setEntry
 
 // pre: (i < m.rows) & (j < m.cols)
-_int16 getEntryImage(Mat m, int i, int j) {
+_int16 getEntryImage(cv::Mat m, int i, int j) {
 	int index = i * m.cols + j;
 	_int16 * p = m.ptr<_int16>(0);
 	return *(p + index);
@@ -159,7 +159,7 @@ _int16 getEntryImage(Mat m, int i, int j) {
 
 // func: calculate product of a row and column of equal length  
 // pre: (row.cols == col.rows) 
-_int16 inproductImage(Mat row, Mat col) {
+_int16 inproductImage(cv::Mat row, cv::Mat col) {
 	_int16 * p1 = row.ptr<_int16>(0);
 	_int16 * p2 = col.ptr<_int16>(0);
 	_int16 sumproducts = 0;
@@ -169,8 +169,8 @@ _int16 inproductImage(Mat row, Mat col) {
 }  // inproductImage
 
 
-Mat getRowImage(Mat m, int rowNr) {
-	Mat result = Mat_<_int16>(1, m.cols);
+cv::Mat getRowImage(cv::Mat m, int rowNr) {
+	cv::Mat result = cv::Mat_<_int16>(1, m.cols);
 	_int16 entry;
 	for (int colNr = 0; colNr < m.cols; colNr++) {
 		entry = getEntryImage(m, rowNr, colNr);
@@ -179,8 +179,8 @@ Mat getRowImage(Mat m, int rowNr) {
 	return result;
 } // getRow
 
-Mat getColImage(Mat m, int colNr) {
-	Mat result = Mat_<_int16>(m.rows, 1);
+cv::Mat getColImage(cv::Mat m, int colNr) {
+	cv::Mat result = cv::Mat_<_int16>(m.rows, 1);
 	_int16 entry;
 	for (int rowNr = 0; rowNr < m.rows; rowNr++) {
 		entry = getEntryImage(m, rowNr, colNr);
@@ -189,9 +189,9 @@ Mat getColImage(Mat m, int colNr) {
 	return result;
 } // getColImage
 
-Mat multiplyImage(Mat a, Mat b)
+cv::Mat multiplyImage(cv::Mat a, cv::Mat b)
 {
-	Mat result = Mat_<_int16>(a.rows, b.cols);
+	cv::Mat result = cv::Mat_<_int16>(a.rows, b.cols);
 	_int16 inprod;
 	for (int arow = 0; arow < a.rows; arow++) {
 		for (int bcol = 0; bcol < b.cols; bcol++) {
@@ -202,10 +202,10 @@ Mat multiplyImage(Mat a, Mat b)
 	return result;
 } // multiplyImage
 
-// pre: matrices have equal dimensions i.e. (a.cols == b.cols) & (a.rows == b.rows) 
-Mat addImage(Mat a, Mat b)
+// pre: cv::Matrices have equal dimensions i.e. (a.cols == b.cols) & (a.rows == b.rows) 
+cv::Mat addImage(cv::Mat a, cv::Mat b)
 {
-	Mat result = Mat_<_int16>(a.rows, a.cols);
+	cv::Mat result = cv::Mat_<_int16>(a.rows, a.cols);
 	_int16 entrysum;
 	for (int row = 0; row < a.rows; row++) {
 		for (int col = 0; col < a.cols; col++) {
@@ -219,7 +219,7 @@ Mat addImage(Mat a, Mat b)
 
 // func: searches the maximum pixel value in the image
 // return: maximum pixel
-_int16 maxPixelImage(Mat m) {
+_int16 maxPixelImage(cv::Mat m) {
 	_int16 max = getEntryImage(m, 0, 0);
 	_int16 next;
 	for (int row = 0; row < m.rows; row++) {
@@ -233,7 +233,7 @@ _int16 maxPixelImage(Mat m) {
 
 // func: searches the minimum pixel value in the image
 // return: minimum pixel value
-_int16 minPixelImage(Mat m) {
+_int16 minPixelImage(cv::Mat m) {
 	_int16 min = getEntryImage(m, 0, 0);
 	_int16 next;
 	for (int row = 0; row < m.rows; row++) {
@@ -248,7 +248,7 @@ _int16 minPixelImage(Mat m) {
 // func: determines the range of the image, i.e. the minimum 
 // and maximum pixel value in the image
 // post: range = minPixelValue, maxPixelValue
-void getPixelRangeImage(Mat m, _int16 &minPixelValue, _int16 &maxPixelValue) {
+void getPixelRangeImage(cv::Mat m, _int16 &minPixelValue, _int16 &maxPixelValue) {
 	_int16 max = getEntryImage(m, 0, 0);
 	_int16 min = getEntryImage(m, 0, 0);
 	_int16 next;
@@ -266,7 +266,7 @@ void getPixelRangeImage(Mat m, _int16 &minPixelValue, _int16 &maxPixelValue) {
 
 
 // func: stretches the image to a specified range
-void stretchImage(Mat m, _int16 minPixelValue, _int16 maxPixelValue) {
+void stretchImage(cv::Mat m, _int16 minPixelValue, _int16 maxPixelValue) {
 	_int16 min, max, oldValue, newValue;
 	getPixelRangeImage(m, min, max);
 	double scale = maxPixelValue - minPixelValue;
@@ -283,8 +283,8 @@ void stretchImage(Mat m, _int16 minPixelValue, _int16 maxPixelValue) {
 
 // func: shows a 16S image on the screen 
 // pre: m is a 16S image (depth 16 bits, signed)
-void show16SImageStretch(Mat m, string windowTitle) {
-	Mat mCopy;
+void show16SImageStretch(cv::Mat m, string windowTitle) {
+	cv::Mat mCopy;
 	m.copyTo(mCopy);
 	stretchImage(mCopy, 0, 255);
 	mCopy.convertTo(mCopy, CV_8U);
@@ -295,36 +295,36 @@ void show16SImageStretch(Mat m, string windowTitle) {
 // func: shows a 16S image on the screen. All values clipped to the interval 0-255
 // i.e. value < 0 => 0; 0 <= value <= 255 => value ; value > 255 => 255 
 /// pre: m is a 16S image (depth 16 bits, signed)
-void show16SImageClip(Mat m, string windowTitle) {
-	Mat mCopy;
+void show16SImageClip(cv::Mat m, string windowTitle) {
+	cv::Mat mCopy;
 	m.copyTo(mCopy);
 	mCopy.convertTo(mCopy, CV_8U);
 //	namedWindow("show16SImageClip", CV_WINDOW_AUTOSIZE);
 	imshow(windowTitle, mCopy);
-	waitKey(0);
+	cv::waitKey(0);
 } // show16SImage
 
 
 // func: histogram gamma correction
 // pre: image has depth 8 bits unsigned and 1 or 3 channels
 // post: entry(i,j) = 255*power(entry@pre(i,j)/255)^gamma
-void gammaCorrection(Mat image, float gamma) {
+void gammaCorrection(cv::Mat image, float gamma) {
 	unsigned char lut[256];
 	for (int i = 0; i < 256; i++) {
-		lut[i] = saturate_cast<uchar>(pow((float)(i / 255.0), gamma) * 255.0f);
+		lut[i] = cv::saturate_cast<uchar>(pow((float)(i / 255.0), gamma) * 255.0f);
 	}
 	//	dst = src.clone();
 	const int channels = image.channels();
 	switch (channels) {
 		case 1: {
-					MatIterator_<uchar> it, end;
+					cv::MatIterator_<uchar> it, end;
 					for (it = image.begin<uchar>(), end = image.end<uchar>(); it != end; it++)
 						*it = lut[(*it)];
 					break;
 		}
 		case 3: {
-					MatIterator_<Vec3b> it, end;
-					for (it = image.begin<Vec3b>(), end = image.end<Vec3b>(); it != end; it++) {
+					cv::MatIterator_<cv::Vec3b> it, end;
+					for (it = image.begin<cv::Vec3b>(), end = image.end<cv::Vec3b>(); it != end; it++) {
 						(*it)[0] = lut[((*it)[0])];
 						(*it)[1] = lut[((*it)[1])];
 						(*it)[2] = lut[((*it)[2])];
@@ -340,9 +340,9 @@ void gammaCorrection(Mat image, float gamma) {
 //       All 1's are made -1. The result is returned.
 //       This function is used by function labelBLOBs
 // pre : binaryImage has depth 16 bits signed int. Contains only values 0 and 1.
-// return_matrix: All "1" are made "-1" meaning value 1 and unvisited.
-Mat makeAdmin(Mat binaryImage) {
-	Mat result = Mat_<_int16>(binaryImage.rows+2, binaryImage.cols+2);
+// return_cv::Matrix: All "1" are made "-1" meaning value 1 and unvisited.
+cv::Mat makeAdmin(cv::Mat binaryImage) {
+	cv::Mat result = cv::Mat_<_int16>(binaryImage.rows+2, binaryImage.cols+2);
 
 	// eerste rij 0 maken
     for (int col = 0; col < result.cols; col++) 
@@ -380,7 +380,7 @@ Mat makeAdmin(Mat binaryImage) {
 //       where the next blob starts.	  
 // return_value: 1 next blob found ; starting position is (row,col)
 //           	 0 no blob found   ; (row, col) == (-1, -1)                   
-bool findNextBlob(Mat admin, int & row, int & col) {
+bool findNextBlob(cv::Mat admin, int & row, int & col) {
 	
 	bool found = false;
 
@@ -413,7 +413,7 @@ bool findNextBlob(Mat admin, int & row, int & col) {
 //          7  0  1
 //          6  X  2 
 //          5  4  3
-_int16 getEntryNeighbour(const Mat & admin , int x, int y, int nr) {
+_int16 getEntryNeighbour(const cv::Mat & admin , int x, int y, int nr) {
 	switch (nr) {
 	case 0: return getEntryImage(admin, x - 1, y    ); break;
 	case 1: return getEntryImage(admin, x - 1, y + 1); break;
@@ -428,7 +428,7 @@ _int16 getEntryNeighbour(const Mat & admin , int x, int y, int nr) {
 } // getEntryNeighbour
 
 // func: determines if there are more than 1 adjacent 1's 
-bool moreNext1(const Mat & admin, int x, int y) {
+bool moreNext1(const cv::Mat & admin, int x, int y) {
 	int cnt1 = 0;
 	bool more = false;
 	for (int nr = 0; (nr <= 7) & !more; nr++) 
@@ -444,7 +444,7 @@ bool moreNext1(const Mat & admin, int x, int y) {
 //          7  0  1
 //          6  X  2
 //          5  4  3
-void findNext1(Mat admin, int & currX, int & currY, int & next1) {
+void findNext1(cv::Mat admin, int & currX, int & currY, int & next1) {
 	int rotX, rotY;
 
 	rotX = currX - 1 ; rotY = currY    ; //0 
@@ -494,7 +494,7 @@ void findNext1(Mat admin, int & currX, int & currY, int & next1) {
 //        in the image.
 //        The disadvantagae however is that the algorithm is more complicated an maybe a little bit
 //        slower than the recursive variant. 
-int labelIter(Mat & admin, int row, int col, int blobNr) {
+int labelIter(cv::Mat & admin, int row, int col, int blobNr) {
 	//  Every visited pixel is labeled with:
 	//  blobNr*10 + <relative position to the parent >
 	//
@@ -558,7 +558,7 @@ int labelIter(Mat & admin, int row, int col, int blobNr) {
 //        in the image.
 //        The disadvantagae however is that the algorithm is more complicated an maybe a little bit
 //        slower than the recursive variant. 
-int labelIterInfo(Mat & admin, int topX, int topY, int blobNr,
+int labelIterInfo(cv::Mat & admin, int topX, int topY, int blobNr,
 				  int & xGravity, int & yGravity) {
 
 	//  Every visited pixel is labeled with:
@@ -627,7 +627,7 @@ int labelIterInfo(Mat & admin, int topX, int topY, int blobNr,
 //  Evaluation: This function uses a recursive algorithm which has the advantage that it is easy and trasparent.
 //        The disadvantagae however is that it claims a lot of spacee on the stack. I.e. every found 
 //        pixel results in a function call which in case of large blobs causes a stack overflow. 
-int labelRecursive(Mat & admin, int row, int col, int blobNr) {
+int labelRecursive(cv::Mat & admin, int row, int col, int blobNr) {
 	int area = 0;
 	// bij waarde -1 is het pixel nog niet bezocht
 	if (getEntryImage(admin, row, col) == -1) {
@@ -653,11 +653,11 @@ int labelRecursive(Mat & admin, int row, int col, int blobNr) {
 } // label
 
 // func: retrieves a labeledImage from the labeling administration
-// pre : admin is contains labeled pixels with neighbour number information. 
+// pre : admin is contains labeled pixels with neighbour number inforcv::Mation. 
 // post: labeledImage: binary 8-connected pixels with value 1 in binaryImage are 
 //       labeled with the number of the object they belong to.
-void retrieveLabeledImage(const Mat & admin, Mat & labeledImage) {
-	labeledImage = Mat_<_int16>(admin.rows-2,admin.cols-2);
+void retrieveLabeledImage(const cv::Mat & admin, cv::Mat & labeledImage) {
+	labeledImage = cv::Mat_<_int16>(admin.rows-2,admin.cols-2);
 
 	for (int row = 1; row < admin.rows-1; row++) {
 		for (int col = 1; col < admin.cols-1; col++) {
@@ -673,14 +673,14 @@ void retrieveLabeledImage(const Mat & admin, Mat & labeledImage) {
 // post: labeledImage: binary 8-connected pixels with value 1 in binaryImage are 
 //       labeled with the number of the object they belong to.
 // return_value: the total number of objects.  
-int labelBLOBs(Mat binaryImage, Mat & labeledImage) {
+int labelBLOBs(cv::Mat binaryImage, cv::Mat & labeledImage) {
 
 	// admin contains the administration of the recursive process.
 	// meaning of the entry values:
 	// -1: a "1" which is not visited yet. Changes to 1 when visited.
 	//  0: always a "0"
 	//  1, 2, 3,... : a "1" which is visited and is labeled with the object number.
-	Mat admin = makeAdmin(binaryImage);
+	cv::Mat admin = makeAdmin(binaryImage);
 	int row = 1;
 	int col = 1;
 
@@ -701,7 +701,7 @@ int labelBLOBs(Mat binaryImage, Mat & labeledImage) {
 // func: removes a BLOB from the labeling administration
 // pre: (posx,posy) is the position of the BLOB, blobNr the number
 //      of the blob to be removed.
-void removeBLOB(Mat & admin, int blobNr) {
+void removeBLOB(cv::Mat & admin, int blobNr) {
 	_int16 value;
 	for (int row = 1; row < admin.rows-2; row++) 
 		for (int col = 1; col < admin.cols-2; col++) {
@@ -721,8 +721,8 @@ void removeBLOB(Mat & admin, int blobNr) {
 //       areaVec: contains all area's of the blobs. The index corresponds to the number
 //       of the blobs. Index 0 has no meaning.
 // return_value: the total number of objects.  
-int labelBLOBsInfo(Mat binaryImage, Mat & labeledImage,
-	vector<Point2d *> & firstpixelVec, vector<Point2d *> & posVec,
+int labelBLOBsInfo(cv::Mat binaryImage, cv::Mat & labeledImage,
+	vector<cv::Point2d *> & firstpixelVec, vector<cv::Point2d *> & posVec,
 	vector<int> & areaVec,
 	int threshAreaMin, int threshAreaMax) {
 
@@ -731,7 +731,7 @@ int labelBLOBsInfo(Mat binaryImage, Mat & labeledImage,
 	// -1: a "1" which is not visited yet. 
 	//  0: always a "0"
 	//  1, 2, 3,... : a "1" which is visited and is labeled with the object number.
-	Mat admin = makeAdmin(binaryImage);
+	cv::Mat admin = makeAdmin(binaryImage);
 	int row = 1;
 	int col = 1;
 
@@ -748,8 +748,8 @@ int labelBLOBsInfo(Mat binaryImage, Mat & labeledImage,
 			area = labelIterInfo(admin, row, col, ++blobNr, xGravity, yGravity);
 			
 			if ((area >= threshAreaMin) & (area <= threshAreaMax)) {
-				firstpixelVec.push_back(new Point2d(row - 1, col - 1));
-				posVec.push_back(new Point2d(xGravity-1, yGravity-1));
+				firstpixelVec.push_back(new cv::Point2d(row - 1, col - 1));
+				posVec.push_back(new cv::Point2d(xGravity-1, yGravity-1));
 				areaVec.push_back(area);
 			}
 			else removeBLOB(admin, blobNr--);

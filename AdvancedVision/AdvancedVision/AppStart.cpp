@@ -16,6 +16,8 @@ int main()
 
 	//TestClass::testChainCode();
 	//TestClass::testBoundingBoxes();
+	std::cout << "press enter on the contour image" << std::endl; // todo remove after presentation
+	TestClass::testBoundingBoxesTraining();
 	TestClass::testFloodFill();
 
 	
