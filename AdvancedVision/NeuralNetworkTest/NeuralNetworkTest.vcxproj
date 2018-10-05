@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{3050A641-8C2C-4D3B-AD09-008F13E1C668}</ProjectGuid>
-    <RootNamespace>AdvancedVision</RootNamespace>
+    <ProjectGuid>{064D2264-8677-4A78-B165-44EA90BDCB94}</ProjectGuid>
+    <RootNamespace>NeuralNetworkTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,35 +70,21 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\opencv\build\include</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world343d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Avans OpenCV\OpenCV\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\Avans OpenCV\OpenCV\build\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world330d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <ProjectReference>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -122,60 +108,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\opencv\build\include&lt;;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Program Files (x86)\opencv\build\x64\vc14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opencv_world343d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AppStart.h" />
-    <ClInclude Include="avansvisionlib.h" />
-    <ClInclude Include="BendingEnergy.h" />
-    <ClInclude Include="FloodFill.h" />
-    <ClInclude Include="BoundingBoxer.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="FileIO.h" />
-    <ClInclude Include="ImageConverter.h" />
-    <ClInclude Include="ImageLoader.h" />
-    <ClInclude Include="MooreBoundaryTracer.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="TestClass.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="AppStart.cpp" />
-    <ClCompile Include="avansvisionlib.cpp" />
-    <ClCompile Include="BendingEnergy.cpp" />
-    <ClCompile Include="FloodFill.cpp" />
-    <ClCompile Include="BoundingBoxer.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="FileIO.cpp" />
-    <ClCompile Include="ImageConverter.cpp" />
-    <ClCompile Include="ImageLoader.cpp" />
-    <ClCompile Include="MooreBoundaryTracer.cpp" />
-    <ClCompile Include="TestClass.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="AdvancedVision.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Res\basisfiguren.jpg" />
-    <Image Include="Res\bladeren.jpg" />
-    <Image Include="Res\blokjes.jpg" />
-    <Image Include="Res\bolenpijl.jpg" />
-    <Image Include="Res\harten.png" />
-    <Image Include="Res\mix.png" />
-    <Image Include="Res\monsters.jpg" />
-    <Image Include="Res\ruiten.png" />
-    <Image Include="Res\rummikub.bmp" />
-    <Image Include="Res\rummikub.JPG" />
-    <Image Include="Res\rummikub0.jpg" />
-    <Image Include="Res\rummikubbin.bmp" />
-    <Image Include="Res\rummikubbw.bmp" />
-    <Image Include="Res\testimg.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
