@@ -21,7 +21,7 @@ int BoundingBoxer::getBoundingBoxes(const std::vector<std::vector<cv::Point>>& c
 		// Get extremes
 		boundingBoxStruct extremes = getContourExtremes(contour);
 		boundingBoxStructs.push_back(extremes);
-		// Construct bounding box vectpr
+		// Construct bounding box vector
 		bbs.push_back(generateBoundingBox(extremes));
 	}
 

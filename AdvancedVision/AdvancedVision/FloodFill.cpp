@@ -72,7 +72,6 @@ const std::vector<cv::Point> bottomPoints
 	{
 		for (int i = 0; i < bottomPoints.size(); i++)
 		{
-			ushort kenk = img.at<ushort>(firstBoundaryPoint + bottomPoints[i]);
 			if (img.at<ushort>(firstBoundaryPoint + bottomPoints[i]) == EMPTY_PIXEL)
 			{
 				cv::Point firstPoint = firstBoundaryPoint + bottomPoints[i];
