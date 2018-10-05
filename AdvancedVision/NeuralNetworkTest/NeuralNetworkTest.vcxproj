@@ -151,11 +151,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="avansvisionlib20.h" />
+    <ClInclude Include="CsvToTrainingSet.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="avansvisionlib20.cpp" />
+    <ClCompile Include="CsvToTrainingSet.cpp" />
     <ClCompile Include="demoBPN.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\banknotes.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

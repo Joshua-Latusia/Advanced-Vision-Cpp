@@ -10,7 +10,7 @@
 #include <string>
 #include <iomanip>
 #include "avansvisionlib20.h" // versie 2.0 (!)
-
+#include "CsvToTrainingSet.h"
 
 
 // Maximale fout die toegestaan wordt in de output voor de training input
@@ -22,7 +22,8 @@ const int MAXRUNS = 10000;
 int main(int argc, char** argv)
 {
 	// IT, OT: input trainingset, output trainingset
-	cv::Mat ITset, OTset;
+	cv::Mat_<double> ITset, OTset;
+	CsvToTrainingSet::toTrainingSet(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotes.csv)", ITset, OTset);
 
 	// V0, W0   : weightfactor matrices
 	// dV0, dW0 : weightfactor correction matrices
@@ -34,7 +35,8 @@ int main(int argc, char** argv)
 	int hiddenNeurons = 2;
 
 	std::cout << std::endl << "Load testtrainingset..." << std::endl << std::endl;
-	loadTrainingSet1(ITset, OTset);
+
+	//loadTrainingSet1(ITset, OTset);
 	//loadBinaryTrainingSet1(ITset, OTset);
 
 	std::cout << "Training Input " << std::endl << std::endl;

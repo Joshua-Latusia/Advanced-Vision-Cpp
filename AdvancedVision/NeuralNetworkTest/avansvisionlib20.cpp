@@ -13,6 +13,293 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
+/*BEGIN********************************************** BACK PROPAGATION NEURAL NETWORK ****************************************************************/
+
+// TRAININGSET:  I0 because of bias V0 
+//
+// setnr     I0     I1     I2    I3    I4    O1   O2
+//   1	     1.0    0.4   -0.7   0.1   0.71  0.0  0.0
+//   2       1.0    0.3   -0.5   0.05  0.34  0.0  0.0
+//   3       1.0    0.6    0.1   0.3   0.12  0.0  1.0
+//   4       1.0    0.2    0.4   0.25  0.34  0.0  1.0
+//   5		 1.0   -0.2    0.12  0.56  1.0   1.0  0.0
+//   6		 1.0	0.1   -0.34  0.12  0.56  1.0  0.0
+//   7		 1.0   -0.6    0.12  0.56  1.0   1.0  1.0
+//   8		 1.0	0.56  -0.2   0.12  0.56  1.0  1.0
+
+void loadTrainingSet1(cv::Mat & ITset, cv::Mat & OTset) {
+
+	// input of trainingset
+	// remark: nummber of columns == number of inputneurons of the BPN
+	ITset = (cv::Mat_<double>(8, 5) <<
+		1, 0.4, -0.7, 0.1, 0.71,
+		1, 0.3, -0.5, 0.05, 0.34,
+		1, 0.6, 0.1, 0.3, 0.12,
+		1, 0.2, 0.4, 0.25, 0.34,
+		1, -0.2, 0.12, 0.56, 1.0,
+		1, 0.1, -0.34, 0.12, 0.56,
+		1, 0.6, 0.12, 0.56, 1.0,
+		1, 0.56, -0.2, 0.12, 0.56);
+
+	// output of trainingset
+	// remark: nummber of columns == number of outputneurons of the BPN
+	OTset = (cv::Mat_<double>(8, 2) <<
+		0, 0,
+		0, 0,
+		0, 1,
+		0, 1,
+		1, 0,
+		1, 0,
+		1, 1,
+		1, 1);
+} // loadTestTrainingSet1
+
+
+  // TRAININGSET binary function O1 = (I1 OR I2) AND I3 
+  // without bias
+  // setnr    I1   I2    I3   O1   
+  //   1	     0    0    0    0 	
+  //   2       0    0    1    0 
+  //   3       0    1    0    0              
+  //   4       0    1    1    1
+  //   5	     1    0    0    0 	
+  //   6       1    0    1    1 
+  //   7       1    1    0    0
+  //   8       1    1    1    1
+void loadBinaryTrainingSet1(cv::Mat & ITset, cv::Mat & OTset) {
+
+	// input of trainingset (without bias)
+	// remark: nummber of columns == number of inputneurons of the BPN
+	ITset = (cv::Mat_<double>(8, 3) <<
+		0, 0, 0,
+		0, 0, 1,
+		0, 1, 0,
+		0, 1, 1,
+		1, 0, 0,
+		1, 0, 1,
+		1, 1, 0,
+		1, 1, 1);
+
+	// output of trainingset
+	// remark: nummber of columns == number of outputneurons of the BPN
+	OTset = (cv::Mat_<double>(8, 1) <<
+		0,
+		0,
+		0,
+		1,
+		0,
+		1,
+		0,
+		1);
+
+} // loadBinaryTrainingSet1
+
+
+  // func: Initialization of the (1) weigthmatrices V0 and W0 and (2) of the delta matrices dV0 and dW0. 
+  // pre: inputNeurons, hiddenNeurons and outputNeurons define the Neural Network. 
+  //      From this numbers the dimensions of the weightmatrices can be determined.
+  // post: V0 and W0 have random values between 0.1 and 0.9
+void initializeBPN(int inputNeurons, int hiddenNeurons, int outputNeurons,
+	cv::Mat & V0, cv::Mat & dV0, cv::Mat & W0, cv::Mat & dW0) {
+
+	// Instellen van alle weegfactoren met een random waarde
+	V0 = cv::Mat_<double>(inputNeurons, hiddenNeurons);
+	W0 = cv::Mat_<double>(hiddenNeurons, outputNeurons);
+	setRandomValue(V0, 0.1, 0.9);
+	setRandomValue(W0, 0.1, 0.9);
+
+	// Initiele aanpassing van de weegfactoren W
+	dV0 = cv::Mat_<double>(inputNeurons, hiddenNeurons);
+	dW0 = cv::Mat_<double>(hiddenNeurons, outputNeurons);
+	setValue(dV0, 0);
+	setValue(dW0, 0);
+} // initializeBPN
+
+  // Test of a BPN with all values defined explicitly 
+void testBPN(cv::Mat & IT, cv::Mat & OT, cv::Mat & V0, cv::Mat & dV0, cv::Mat & W0, cv::Mat & dW0) {
+
+	// input of trainingset
+	// remark: number of columns == number of inputneurons of the BPN
+	IT = (cv::Mat_<double>(5, 2) <<
+		0.4, -0.7,
+		0.3, -0.5,
+		0.6, 0.1,
+		0.2, 0.4,
+		0.1, -0.2);
+
+	// output of trainingset
+	// remark: nummber of columns == number of outputneurons of the BPN
+	OT = (cv::Mat_<double>(5, 1) <<
+		0.1,
+		0.05,
+		0.3,
+		0.25,
+		0.12);
+
+	// STEP2:  Initializing the weights
+	V0 = (cv::Mat_<double>(2, 2) <<
+		0.1, 0.4,
+		-0.2, 0.2);
+
+	W0 = (cv::Mat_<double>(2, 1) <<
+		0.2,
+		-0.5);
+
+	// Initiele aanpassing van de weegfactoren W
+	dW0 = (cv::Mat_<double>(2, 1) <<
+		0.0,
+		0.0);
+
+	// Initiele aanpassing van de weegfactoren V
+	dV0 = (cv::Mat_<double>(2, 2) <<
+		0.0, 0.0,
+		0.0, 0.0);
+
+} //  testBPN
+
+
+
+
+  // func: Given an inputvector of the inputlayer and a weightmatrix V calculates the outputvector of the hiddenlayer
+  // pre: II is input of the inputlayer. V = matrix with weightfactors between inputlayer and the hiddenlayer.
+  // post: OH is the outputvector of the hidden layer
+void calculateOutputHiddenLayer(cv::Mat II, cv::Mat V, cv::Mat & OH) {
+
+	// STEP1: Output inputlayer := Input inputlayer    
+	cv::Mat OI;
+	II.copyTo(OI);
+
+	// STEP2:  Initializing the weights, already done, see input of this function
+
+	// STEP3: Calculate input of the hiddenlayer, i.e. IH = V0transposed * OI
+	cv::Mat Vtr = transpose(V);
+	cv::Mat IH = multiply(Vtr, OI);
+
+	// STEP4: Calculate output of the hiddenlayer, i.e. OH(i) = 1/(1+EXP(-IH(i)))   
+	int hiddenNeurons = V.cols;
+	OH = cv::Mat_<double>(hiddenNeurons, 1);
+	for (int row = 0; row < hiddenNeurons; row++)
+		setEntry(OH, row, 0, 1 / (1 + exp(-getEntry(IH, row, 0))));
+
+} // calculateOutputHiddenLayer
+
+  // func: Given the outputvector of the hiddenlayer and a weigthmatrix W calculates the outputvector of the outputlayer
+  // pre: OH is the outputvector of the hiddenlayer. W = matrix with weightfactors between hiddenlayer and the outputlayer.
+  // post: OO is the outputvector of the output layer
+void calculateOutputBPN(cv::Mat OH, cv::Mat W, cv::Mat & OO) {
+
+	// STEP5: Calculate input of the outputlayer, i.e. IO = W0transposed * OH
+	cv::Mat Wtr = transpose(W);
+	cv::Mat IO = multiply(Wtr, OH);
+
+	// STEP6: Calculate output of the outputlayer, i.e. OO(i) = 1/(1+EXP(-IO(i)))
+	int outputNeurons = W.cols;
+	OO = cv::Mat_<double>(outputNeurons, 1);
+	for (int row = 0; row < outputNeurons; row++)
+		setEntry(OO, row, 0, 1 / (1 + exp(-getEntry(IO, row, 0))));
+
+} // calculateOutputBPN
+
+
+  // func: Calculates the total error Error = 1/2*Sigma(OTi-OOi)^2. 
+  //       OTi is the expected output according to the trainingvector i
+  //       OOi is the calculated output from the current neural network of the traininngvector i
+  // pre: OO is the outputvector of the outputlayer. OT is the expected outputvector from the trainingset 
+  // post: OO is the outputvector of the output layer
+void calculateOutputBPNError(cv::Mat OO, cv::Mat OT, double & outputError) {
+
+	// STEP7: Calculate the error, i.e. Error = 1/2*Sigma(TOi-OOi)^2
+	double sumSqrErr = 0, diff = 0;
+	for (int row = 0; row < OT.rows; row++) {
+		diff = getEntry(OT, row, 0) - getEntry(OO, row, 0);
+		sumSqrErr += (diff * diff);
+	}
+	outputError = 0.5 * sumSqrErr;
+
+} // calculateOutputBPNError
+
+
+void adaptVW(cv::Mat OT, cv::Mat OO, cv::Mat OH, cv::Mat OI, cv::Mat W0, cv::Mat dW0, cv::Mat V0, cv::Mat dV0, cv::Mat & W, cv::Mat & V,
+	double ALPHA, double ETHA) {
+
+
+	/*BEGIN*** AANPASSING VAN DE WEEGFACTOREN W ****/
+
+	// STEP8: 
+	// E = 1/2 Sigma(OOi - di)^2  ==> dE/dOO = Sigma(OOi - di)
+	// dE/dIO = dE/dOO * dOO/dIO = Sigma((OOi - Ti) * OOi * (1 - OOi))
+	// Here: d = dE/dIO = (T-OO) * OO * (1 - OO) 
+	cv::Mat OOerror = cv::Mat_<double>(OT.rows, 1);
+	OOerror = OT - OO;
+
+	cv::Mat d = cv::Mat_<double>(OT.rows, 1);
+	double di;
+	for (int row = 0; row < OT.rows; row++) {
+		di = (getEntry(OT, row, 0) - getEntry(OO, row, 0)) * getEntry(OO, row, 0) * (1 - getEntry(OO, row, 0));
+		setEntry(d, row, 0, di);
+	}
+
+	// Y = OH * d 
+	cv::Mat dtr = transpose(d);
+	cv::Mat Y = cv::Mat_<double>(OH.rows, OT.rows);
+	Y = multiply(OH, dtr); // OH = mx1 ; d = nx1 ; dtr = 1xn
+
+						   // STEP9: dW1 = alpha * dW0 +  etha * Y // assume etha = 0.6 
+	cv::Mat dW = cv::Mat_<double>(OH.rows, OT.rows);
+	dW = ALPHA * dW0 + ETHA * Y;
+
+	/*END*** AANPASSING VAN DE WEEGFACTOREN W ****/
+
+	/*BEGIN*** AANPASSING VAN DE WEEGFACTOREN V ****/
+
+	// STEP10: OHerror = W0 * d
+	cv::Mat OHerror = cv::Mat_<double>(OH.rows, 1);
+	OHerror = W0 * d;
+
+	// STEP11: 
+	// d = dE/dIO = OOerror * OO * (1 - OO)  // OOError = TO - OO
+	// d*= dE/dIH = OHerror * OH * (1 - OH)  // OHerror = W0 * d 
+	cv::Mat dstar = cv::Mat_<double>(OH.rows, 1);
+	double dstari;
+	for (int row = 0; row < OH.rows; row++) {
+		dstari = getEntry(OHerror, row, 0) * getEntry(OH, row, 0) * (1 - getEntry(OH, row, 0));
+		setEntry(dstar, row, 0, dstari);
+	}
+
+	// STEP12:
+	// X = OI * dstar
+	cv::Mat dstartr = transpose(dstar);
+	cv::Mat X = cv::Mat_<double>(OI.rows, OH.rows);
+	X = OI * dstartr;
+
+	// STEP13: dV1 = ALPHA * dV0 +  ETHA * X // assume etha = 0.6 
+	cv::Mat dV;
+	dV = ALPHA * dV0 + ETHA * X;
+	/*END*** AANPASSING VAN DE WEEGFACTOREN V ****/
+
+	/* Update van de matrices met gewichtsfactoren */
+
+	// STEP14:
+	V = cv::Mat_<double>(V0.rows, V0.cols);
+	W = cv::Mat_<double>(W0.rows, W0.cols);
+	V = V0 + dV;
+	W = W0 + dW;
+
+}; // adaptVW
+
+
+cv::Mat BPN(cv::Mat II, cv::Mat V, cv::Mat W) {
+	cv::Mat OH, OO;
+	calculateOutputHiddenLayer(II, V, OH);
+	calculateOutputBPN(OH, W, OO);
+	return OO;
+} // BPN
+
+  /*END********************************************** BACK PROPAGATION NEURAL NETWORK ****************************************************************/
+
+
+
+
 // pre: (i < m.rows) & (j < m.cols)
 // Mat is call by reference
 void setEntry(cv::Mat m, int i, int j, double value) {
@@ -762,288 +1049,3 @@ int labelBLOBsInfo(cv::Mat binaryImage, cv::Mat & labeledImage,
 	// laatste volgnummer is gelijk aan het aantal gevonden blobs
 	return blobNr;
 } // labelBLOBsInfo
-
-
-  /*BEGIN********************************************** BACK PROPAGATION NEURAL NETWORK ****************************************************************/
-
-  // TRAININGSET:  I0 because of bias V0 
-  //
-  // setnr     I0     I1     I2    I3    I4    O1   O2
-  //   1	     1.0    0.4   -0.7   0.1   0.71  0.0  0.0
-  //   2       1.0    0.3   -0.5   0.05  0.34  0.0  0.0
-  //   3       1.0    0.6    0.1   0.3   0.12  0.0  1.0
-  //   4       1.0    0.2    0.4   0.25  0.34  0.0  1.0
-  //   5		 1.0   -0.2    0.12  0.56  1.0   1.0  0.0
-  //   6		 1.0	0.1   -0.34  0.12  0.56  1.0  0.0
-  //   7		 1.0   -0.6    0.12  0.56  1.0   1.0  1.0
-  //   8		 1.0	0.56  -0.2   0.12  0.56  1.0  1.0
-
-void loadTrainingSet1(cv::Mat & ITset, cv::Mat & OTset) {
-
-	// input of trainingset
-	// remark: nummber of columns == number of inputneurons of the BPN
-	ITset = (cv::Mat_<double>(8, 5) <<
-		1, 0.4, -0.7, 0.1, 0.71,
-		1, 0.3, -0.5, 0.05, 0.34,
-		1, 0.6, 0.1, 0.3, 0.12,
-		1, 0.2, 0.4, 0.25, 0.34,
-		1, -0.2, 0.12, 0.56, 1.0,
-		1, 0.1, -0.34, 0.12, 0.56,
-		1, 0.6, 0.12, 0.56, 1.0,
-		1, 0.56, -0.2, 0.12, 0.56);
-
-	// output of trainingset
-	// remark: nummber of columns == number of outputneurons of the BPN
-	OTset = (cv::Mat_<double>(8, 2) <<
-		0, 0,
-		0, 0,
-		0, 1,
-		0, 1,
-		1, 0,
-		1, 0,
-		1, 1,
-		1, 1);
-} // loadTestTrainingSet1
-
-
-  // TRAININGSET binary function O1 = (I1 OR I2) AND I3 
-  // without bias
-  // setnr    I1   I2    I3   O1   
-  //   1	     0    0    0    0 	
-  //   2       0    0    1    0 
-  //   3       0    1    0    0              
-  //   4       0    1    1    1
-  //   5	     1    0    0    0 	
-  //   6       1    0    1    1 
-  //   7       1    1    0    0
-  //   8       1    1    1    1
-void loadBinaryTrainingSet1(cv::Mat & ITset, cv::Mat & OTset) {
-
-	// input of trainingset (without bias)
-	// remark: nummber of columns == number of inputneurons of the BPN
-	ITset = (cv::Mat_<double>(8, 3) <<
-		0, 0, 0,
-		0, 0, 1,
-		0, 1, 0,
-		0, 1, 1,
-		1, 0, 0,
-		1, 0, 1,
-		1, 1, 0,
-		1, 1, 1);
-
-	// output of trainingset
-	// remark: nummber of columns == number of outputneurons of the BPN
-	OTset = (cv::Mat_<double>(8, 1) <<
-		0,
-		0,
-		0,
-		1,
-		0,
-		1,
-		0,
-		1);
-
-} // loadBinaryTrainingSet1
-
-
-  // func: Initialization of the (1) weigthmatrices V0 and W0 and (2) of the delta matrices dV0 and dW0. 
-  // pre: inputNeurons, hiddenNeurons and outputNeurons define the Neural Network. 
-  //      From this numbers the dimensions of the weightmatrices can be determined.
-  // post: V0 and W0 have random values between 0.1 and 0.9
-void initializeBPN(int inputNeurons, int hiddenNeurons, int outputNeurons,
-	cv::Mat & V0, cv::Mat & dV0, cv::Mat & W0, cv::Mat & dW0) {
-
-	// Instellen van alle weegfactoren met een random waarde
-	V0 = cv::Mat_<double>(inputNeurons, hiddenNeurons);
-	W0 = cv::Mat_<double>(hiddenNeurons, outputNeurons);
-	setRandomValue(V0, 0.1, 0.9);
-	setRandomValue(W0, 0.1, 0.9);
-
-	// Initiele aanpassing van de weegfactoren W
-	dV0 = cv::Mat_<double>(inputNeurons, hiddenNeurons);
-	dW0 = cv::Mat_<double>(hiddenNeurons, outputNeurons);
-	setValue(dV0, 0);
-	setValue(dW0, 0);
-} // initializeBPN
-
-  // Test of a BPN with all values defined explicitly 
-void testBPN(cv::Mat & IT, cv::Mat & OT, cv::Mat & V0, cv::Mat & dV0, cv::Mat & W0, cv::Mat & dW0) {
-
-	// input of trainingset
-	// remark: number of columns == number of inputneurons of the BPN
-	IT = (cv::Mat_<double>(5, 2) <<
-		0.4, -0.7,
-		0.3, -0.5,
-		0.6, 0.1,
-		0.2, 0.4,
-		0.1, -0.2);
-
-	// output of trainingset
-	// remark: nummber of columns == number of outputneurons of the BPN
-	OT = (cv::Mat_<double>(5, 1) <<
-		0.1,
-		0.05,
-		0.3,
-		0.25,
-		0.12);
-
-	// STEP2:  Initializing the weights
-	V0 = (cv::Mat_<double>(2, 2) <<
-		0.1, 0.4,
-		-0.2, 0.2);
-
-	W0 = (cv::Mat_<double>(2, 1) <<
-		0.2,
-		-0.5);
-
-	// Initiele aanpassing van de weegfactoren W
-	dW0 = (cv::Mat_<double>(2, 1) <<
-		0.0,
-		0.0);
-
-	// Initiele aanpassing van de weegfactoren V
-	dV0 = (cv::Mat_<double>(2, 2) <<
-		0.0, 0.0,
-		0.0, 0.0);
-
-} //  testBPN
-
-
-
-
-  // func: Given an inputvector of the inputlayer and a weightmatrix V calculates the outputvector of the hiddenlayer
-  // pre: II is input of the inputlayer. V = matrix with weightfactors between inputlayer and the hiddenlayer.
-  // post: OH is the outputvector of the hidden layer
-void calculateOutputHiddenLayer(cv::Mat II, cv::Mat V, cv::Mat & OH) {
-
-	// STEP1: Output inputlayer := Input inputlayer    
-	cv::Mat OI;
-	II.copyTo(OI);
-
-	// STEP2:  Initializing the weights, already done, see input of this function
-
-	// STEP3: Calculate input of the hiddenlayer, i.e. IH = V0transposed * OI
-	cv::Mat Vtr = transpose(V);
-	cv::Mat IH = multiply(Vtr, OI);
-
-	// STEP4: Calculate output of the hiddenlayer, i.e. OH(i) = 1/(1+EXP(-IH(i)))   
-	int hiddenNeurons = V.cols;
-	OH = cv::Mat_<double>(hiddenNeurons, 1);
-	for (int row = 0; row < hiddenNeurons; row++)
-		setEntry(OH, row, 0, 1 / (1 + exp(-getEntry(IH, row, 0))));
-
-} // calculateOutputHiddenLayer
-
-  // func: Given the outputvector of the hiddenlayer and a weigthmatrix W calculates the outputvector of the outputlayer
-  // pre: OH is the outputvector of the hiddenlayer. W = matrix with weightfactors between hiddenlayer and the outputlayer.
-  // post: OO is the outputvector of the output layer
-void calculateOutputBPN(cv::Mat OH, cv::Mat W, cv::Mat & OO) {
-
-	// STEP5: Calculate input of the outputlayer, i.e. IO = W0transposed * OH
-	cv::Mat Wtr = transpose(W);
-	cv::Mat IO = multiply(Wtr, OH);
-
-	// STEP6: Calculate output of the outputlayer, i.e. OO(i) = 1/(1+EXP(-IO(i)))
-	int outputNeurons = W.cols;
-	OO = cv::Mat_<double>(outputNeurons, 1);
-	for (int row = 0; row < outputNeurons; row++)
-		setEntry(OO, row, 0, 1 / (1 + exp(-getEntry(IO, row, 0))));
-
-} // calculateOutputBPN
-
-
-  // func: Calculates the total error Error = 1/2*Sigma(OTi-OOi)^2. 
-  //       OTi is the expected output according to the trainingvector i
-  //       OOi is the calculated output from the current neural network of the traininngvector i
-  // pre: OO is the outputvector of the outputlayer. OT is the expected outputvector from the trainingset 
-  // post: OO is the outputvector of the output layer
-void calculateOutputBPNError(cv::Mat OO, cv::Mat OT, double & outputError) {
-
-	// STEP7: Calculate the error, i.e. Error = 1/2*Sigma(TOi-OOi)^2
-	double sumSqrErr = 0, diff = 0;
-	for (int row = 0; row < OT.rows; row++) {
-		diff = getEntry(OT, row, 0) - getEntry(OO, row, 0);
-		sumSqrErr += (diff * diff);
-	}
-	outputError = 0.5 * sumSqrErr;
-
-} // calculateOutputBPNError
-
-
-void adaptVW(cv::Mat OT, cv::Mat OO, cv::Mat OH, cv::Mat OI, cv::Mat W0, cv::Mat dW0, cv::Mat V0, cv::Mat dV0, cv::Mat & W, cv::Mat & V,
-	double ALPHA, double ETHA) {
-
-
-	/*BEGIN*** AANPASSING VAN DE WEEGFACTOREN W ****/
-
-	// STEP8: 
-	// E = 1/2 Sigma(OOi - di)^2  ==> dE/dOO = Sigma(OOi - di)
-	// dE/dIO = dE/dOO * dOO/dIO = Sigma((OOi - Ti) * OOi * (1 - OOi))
-	// Here: d = dE/dIO = (T-OO) * OO * (1 - OO) 
-	cv::Mat OOerror = cv::Mat_<double>(OT.rows, 1);
-	OOerror = OT - OO;
-
-	cv::Mat d = cv::Mat_<double>(OT.rows, 1);
-	double di;
-	for (int row = 0; row < OT.rows; row++) {
-		di = (getEntry(OT, row, 0) - getEntry(OO, row, 0)) * getEntry(OO, row, 0) * (1 - getEntry(OO, row, 0));
-		setEntry(d, row, 0, di);
-	}
-
-	// Y = OH * d 
-	cv::Mat dtr = transpose(d);
-	cv::Mat Y = cv::Mat_<double>(OH.rows, OT.rows);
-	Y = multiply(OH, dtr); // OH = mx1 ; d = nx1 ; dtr = 1xn
-
-						   // STEP9: dW1 = alpha * dW0 +  etha * Y // assume etha = 0.6 
-	cv::Mat dW = cv::Mat_<double>(OH.rows, OT.rows);
-	dW = ALPHA * dW0 + ETHA * Y;
-
-	/*END*** AANPASSING VAN DE WEEGFACTOREN W ****/
-
-	/*BEGIN*** AANPASSING VAN DE WEEGFACTOREN V ****/
-
-	// STEP10: OHerror = W0 * d
-	cv::Mat OHerror = cv::Mat_<double>(OH.rows, 1);
-	OHerror = W0 * d;
-
-	// STEP11: 
-	// d = dE/dIO = OOerror * OO * (1 - OO)  // OOError = TO - OO
-	// d*= dE/dIH = OHerror * OH * (1 - OH)  // OHerror = W0 * d 
-	cv::Mat dstar = cv::Mat_<double>(OH.rows, 1);
-	double dstari;
-	for (int row = 0; row < OH.rows; row++) {
-		dstari = getEntry(OHerror, row, 0) * getEntry(OH, row, 0) * (1 - getEntry(OH, row, 0));
-		setEntry(dstar, row, 0, dstari);
-	}
-
-	// STEP12:
-	// X = OI * dstar
-	cv::Mat dstartr = transpose(dstar);
-	cv::Mat X = cv::Mat_<double>(OI.rows, OH.rows);
-	X = OI * dstartr;
-
-	// STEP13: dV1 = ALPHA * dV0 +  ETHA * X // assume etha = 0.6 
-	cv::Mat dV;
-	dV = ALPHA * dV0 + ETHA * X;
-	/*END*** AANPASSING VAN DE WEEGFACTOREN V ****/
-
-	/* Update van de matrices met gewichtsfactoren */
-
-	// STEP14:
-	V = cv::Mat_<double>(V0.rows, V0.cols);
-	W = cv::Mat_<double>(W0.rows, W0.cols);
-	V = V0 + dV;
-	W = W0 + dW;
-
-}; // adaptVW
-
-
-cv::Mat BPN(cv::Mat II, cv::Mat V, cv::Mat W) {
-	cv::Mat OH, OO;
-	calculateOutputHiddenLayer(II, V, OH);
-	calculateOutputBPN(OH, W, OO);
-	return OO;
-} // BPN
-
-  /*END********************************************** BACK PROPAGATION NEURAL NETWORK ****************************************************************/

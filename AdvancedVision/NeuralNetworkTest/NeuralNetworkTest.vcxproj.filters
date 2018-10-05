@@ -21,6 +21,9 @@
     <ClInclude Include="avansvisionlib20.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CsvToTrainingSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="avansvisionlib20.cpp">
@@ -29,5 +32,13 @@
     <ClCompile Include="demoBPN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CsvToTrainingSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\banknotes.csv">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
