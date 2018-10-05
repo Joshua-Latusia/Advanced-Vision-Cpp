@@ -143,7 +143,6 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 	//calculates the firstpixel inside of the boundary
 	const cv::Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
 	cv::Mat filledImage = image;
-
 	bool isNeighbourSet = false;
 
 	//add the first pixel to the pixelsToCheck to start the algorithm
