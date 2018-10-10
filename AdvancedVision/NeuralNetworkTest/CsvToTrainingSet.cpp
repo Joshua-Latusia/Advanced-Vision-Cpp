@@ -48,7 +48,7 @@ void CsvToTrainingSet::toTrainingSet(const std::string path, cv::Mat_<double>& i
 		double d = std::stod(vstrings[VARIANCE_INDEX]);
 
 		// Add input to inputmatrix, the first element in the row should be a 1
-		cv::Mat inputRow = (cv::Mat_<double>(1, vstrings.size() ) <<
+		cv::Mat inputRow = (cv::Mat_<double>(1, vstrings.size()) <<
 			1, std::stod(vstrings[VARIANCE_INDEX]), std::stod(vstrings[SKEWNESS_INDEX]), std::stod(vstrings[CURTOSIS_INDEX]), std::stod(vstrings[ENTROPY_INDEX]));
 		inputSet.push_back(inputRow);
 

@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 {
 	// IT, OT: input trainingset, output trainingset
 	cv::Mat_<double> ITset, OTset;
-	CsvToTrainingSet::toTrainingSet(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotes.csv)", ITset, OTset);
+	CsvToTrainingSet::toTrainingSet(R"(Res\banknotes.csv)", ITset, OTset);
 
 	// V0, W0   : weightfactor matrices
 	// dV0, dW0 : weightfactor correction matrices
