@@ -18,25 +18,18 @@ CsvToTrainingSet::~CsvToTrainingSet()
 
 void CsvToTrainingSet::toTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
 {
-	int index = 0;
-
 	// Open filestream
 	std::ifstream fs;
 	fs.open(path);
-
+	
 	// Read file line by line
 	std::string line;
+	// skip first line
+	fs >> line;
+
 	while (!fs.eof()) 
 	{
 		fs >> line;
-
-		// Skip first line and lines with text
-		if (index == 0)
-		{
-			index++;
-			continue;;
-		}
-		
 
 		// Splitting line into seperated string with the comma delimiter
 		std::stringstream ss(line);
@@ -44,8 +37,6 @@ void CsvToTrainingSet::toTrainingSet(const std::string path, cv::Mat_<double>& i
 		std::istream_iterator<std::string> begin(ss);
 		std::istream_iterator<std::string> end;
 		std::vector<std::string> vstrings(begin, end);
-
-		double d = std::stod(vstrings[VARIANCE_INDEX]);
 
 		// Add input to inputmatrix, the first element in the row should be a 1
 		cv::Mat inputRow = (cv::Mat_<double>(1, vstrings.size() ) <<
@@ -55,7 +46,6 @@ void CsvToTrainingSet::toTrainingSet(const std::string path, cv::Mat_<double>& i
 		// Add output to outputmatrix
 		cv::Mat outputRow = (cv::Mat_<double>(1, 1) << std::stod(vstrings[CLASS_INDEX]));
 		outputSet.push_back(outputRow);
-
 	}
 
 	// Close the File
