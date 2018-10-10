@@ -153,11 +153,13 @@
     <ClInclude Include="avansvisionlib20.h" />
     <ClInclude Include="CsvToTrainingSet.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="setToCsv.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="avansvisionlib20.cpp" />
     <ClCompile Include="CsvToTrainingSet.cpp" />
     <ClCompile Include="demoBPN.cpp" />
+    <ClCompile Include="setToCsv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\banknotes.csv" />

@@ -2,6 +2,7 @@
 #include <string>
 #include <opencv2/core/mat.hpp>
 
+/*Defines for the banknotes CSV*/
 #define VARIANCE_INDEX 0
 #define SKEWNESS_INDEX 1
 #define CURTOSIS_INDEX 2
@@ -11,6 +12,39 @@
 namespace cv {
 	class Mat;
 }
+
+/// <summary>
+/// Struct for storing Csv specific data
+/// </summary>
+struct csvColums
+{	
+	/// <summary>
+	/// The column names of the csv
+	/// </summary>
+	std::vector<std::string> columnNames;
+		
+	/// <summary>
+	/// The amount of feature colums
+	/// </summary>
+	int featureColums;
+	
+	/// <summary>
+	/// The amount of output colums
+	/// </summary>
+	int outputColumns;
+	
+	/// <summary>
+	/// Determines whether the colums are valid by checking amount of columnames with the gives feature and output colums.
+	/// </summary>
+	/// <returns>
+	///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+	/// </returns>
+	bool isValid() const
+	{
+		return static_cast<int>(columnNames.size()) == featureColums + outputColumns && featureColums > 0 && outputColumns > 0;
+	}
+
+};
 
 /// <summary>
 /// Struct for spliting strings with commas into vectors
@@ -39,13 +73,24 @@ public:
 	~CsvToTrainingSet();
 	
 	/// <summary>
-	/// Converts a csv file to a trainingset
+	/// Converts a banknotes csv file to a trainingset
 	/// Converts the all the values that are not the last value in a row to the inputSet row
 	/// Sets the last value to the output set row
 	/// </summary>
 	/// <param name="path">The path of the file.</param>
 	/// <param name="inputSet">The input set.</param>
 	/// <param name="outputSet">The output set.</param>
-	static void toTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
+	static void bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
+	
+	/// <summary>
+	/// Converts a csv file to a trainingset.
+	/// In the csv the first row has to be the names of 
+	/// </summary>
+	/// <param name="path">The path of the file.</param>
+	/// <param name="featureColums"> Amount of colums that are a feature.</param>
+	/// <param name="inputSet">The input set.</param>
+	/// <param name="outputSet">The output set.</param>
+	static csvColums csvToTrainingSet(const std::string path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
+
 };
 
