@@ -122,7 +122,7 @@ int MooreBoundaryTracer::getContours(const cv::Mat& image, OUT std::vector<std::
 		contourVecVec.push_back(getBoundaryPoints(image, currentPixel, backtrackPixel));
 	}
 
-	return firstPixels.size();
+	return static_cast<int>(firstPixels.size());
 }
 
 std::vector<cv::Point> MooreBoundaryTracer::getBoundaryPoints(const cv::Mat& image, cv::Point currentPixel, cv::Point backtrackPixel)
@@ -216,5 +216,5 @@ void MooreBoundaryTracer::printImageToConsole(const cv::Mat image)
 
 int MooreBoundaryTracer::getOffSetIndex(const cv::Point& offset)
 {
-	return std::distance(neighbour_coordinates.begin(),std::find(neighbour_coordinates.begin(), neighbour_coordinates.end(), offset));
+	return static_cast<int>(std::distance(neighbour_coordinates.begin(),std::find(neighbour_coordinates.begin(), neighbour_coordinates.end(), offset)));
 }

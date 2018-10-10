@@ -52,3 +52,15 @@ AdvancedVision/AdvancedVision/Debug/
 *.db-shm
 
 AdvancedVision/AdvancedVision/Res/rummikubbin/
+
+*.pdb
+
+*.idb
+
+*.log
+
+*.lastbuildstate
+
+*.tlog
+
+AdvancedVision/AdvancedVision/Res/mixed/
