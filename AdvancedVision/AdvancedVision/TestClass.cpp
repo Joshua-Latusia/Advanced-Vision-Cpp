@@ -198,13 +198,48 @@ void TestClass::testBoundingBoxesTraining()
 
 void TestClass::testFloodFill()
 {
-	// Read in image and diplay it
+
+
 	cv::Mat image;
+
+	ImageLoader::loadImageFromPath(image, R"(Res\NeuralTestSets\Key\key_1.jpg)");
+
+	cv::Mat binaryImage;
+	// Convert to 16 bit
+	cvtColor(image, binaryImage, CV_BGR2GRAY);
+	binaryImage.convertTo(binaryImage, CV_16S);
+
+
+	threshold(binaryImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
+	show16SImageStretch(binaryImage, "Binary image");
+	show16SImageStretch(binaryImage, "Contour image");
+
+	cv::waitKey();
+
+
+	cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+	std::vector<std::vector<cv::Point>> contourPoints;
+	MooreBoundaryTracer::getContours(binaryImage, contourPoints);
+//	MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
+	//show16SImageStretch(contourImage, "Contour image");
+	cv::waitKey();
+	cv::Moments mom = cv::moments(contourPoints[0]);
+	double huMoments[7];
+	cv::HuMoments(mom, huMoments);
+
+	return;
+
+
+
+
+
+	// Read in image and diplay it
+//	cv::Mat image;
 	std::vector<std::vector<cv::Point>> contourVector;
 	/*ImageLoader::loadImageFromPath(image,
 		R"(Res\testImg.png)");*/
 	ImageLoader::loadImageFromPath(image,
-		R"(Res\mix2.png)");
+		R"(Res\SchoppenTestSet.png)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -236,12 +271,12 @@ void TestClass::testFloodFill()
 		for (int contours = 0; contours < contourPoints.size(); contours++)
 		{
 			std::vector<cv::Point> regionPixels;
-			FloodFill::getEnclosedPixels(binaryImage, contourPoints[contours], regionPixels, true);
+			FloodFill::getEnclosedPixels(binaryImage, contourPoints[contours], regionPixels);
 			allBlobsRegionPixels.push_back(regionPixels);
 			regionPixels.clear();
 		}
 
-		FloodFill::saveEnclosedPixelsImages(image, allBlobsRegionPixels, R"(Res)", "mixedClosedPixels");
+		FloodFill::saveEnclosedPixelsImages(image, allBlobsRegionPixels, R"(Res)", "Schoppen");
 		//BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "harten");
 		// Test boundary fill
 		

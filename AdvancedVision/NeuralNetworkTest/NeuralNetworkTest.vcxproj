@@ -152,12 +152,14 @@
   <ItemGroup>
     <ClInclude Include="avansvisionlib20.h" />
     <ClInclude Include="CsvToTrainingSet.h" />
+    <ClInclude Include="Fase3Test.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="avansvisionlib20.cpp" />
     <ClCompile Include="CsvToTrainingSet.cpp" />
     <ClCompile Include="demoBPN.cpp" />
+    <ClCompile Include="Fase3Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\banknotes.csv" />

@@ -11,6 +11,7 @@
 #include <iomanip>
 #include "avansvisionlib20.h" // versie 2.0 (!)
 #include "CsvToTrainingSet.h"
+#include "Fase3Test.h"
 
 
 // Maximale fout die toegestaan wordt in de output voor de training input
@@ -21,6 +22,9 @@ const int MAXRUNS = 10000;
 
 int main(int argc, char** argv)
 {
+	//Fase3Test::HuMomentsTest();
+	//return 0;
+
 	// IT, OT: input trainingset, output trainingset
 	cv::Mat_<double> ITset, OTset;
 	CsvToTrainingSet::toTrainingSet(R"(Res\banknotes.csv)", ITset, OTset);
@@ -72,6 +76,7 @@ int main(int argc, char** argv)
 	// outputError0: error on output for the current input and weighfactors V0, W0
 	// outputError1: error on output for the current input and new calculated 
 	//               weighfactors, i.e. V1, W1
+
 	double outputError0, outputError1, sumSqrDiffError = MAX_OUTPUT_ERROR + 1;
 	cv::Mat V1, W1;
 
