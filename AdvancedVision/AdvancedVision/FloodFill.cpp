@@ -71,7 +71,6 @@ const std::vector<cv::Point> bottomPoints
 	{
 		for (int i = 0; i < bottomPoints.size(); i++)
 		{
-			ushort kenk = img.at<ushort>(firstBoundaryPoint + bottomPoints[i]);
 			if (img.at<ushort>(firstBoundaryPoint + bottomPoints[i]) == EMPTY_PIXEL)
 			{
 				cv::Point firstPoint = firstBoundaryPoint + bottomPoints[i];
@@ -143,7 +142,6 @@ void FloodFill::fillImageEightConnected(const cv::Mat & image, const std::vector
 	//calculates the firstpixel inside of the boundary
 	const cv::Point firstPixel = FloodFill::calculateFirstPixel(image, boundaryVec);
 	cv::Mat filledImage = image;
-
 	bool isNeighbourSet = false;
 
 	//add the first pixel to the pixelsToCheck to start the algorithm

@@ -120,6 +120,7 @@ void TestClass::testBoundingBoxes()
 	}
 	else
 	{
+		
 		cv::Mat binaryImage;
 		// Convert to 16 bit
 		cvtColor(image, binaryImage, CV_BGR2GRAY);
@@ -157,7 +158,7 @@ void TestClass::testBoundingBoxesTraining()
 	/*ImageLoader::loadImageFromPath(image,
 		R"(Res\harten.png)");*/
 	ImageLoader::loadImageFromPath(image,
-		R"(Res\mix2.png)");
+		R"(Res\harten.png)");
 	if (!image.data)
 	{
 		std::cout << "Could not open file" << std::endl;
@@ -165,6 +166,7 @@ void TestClass::testBoundingBoxesTraining()
 	}
 	else
 	{
+		cv::imshow( "original image", image);
 		cv::Mat binaryImage;
 		// Convert to 16 bit
 		cvtColor(image, binaryImage, CV_BGR2GRAY);
@@ -188,7 +190,7 @@ void TestClass::testBoundingBoxesTraining()
 		show16SImageStretch(bbsImage, "Bbs image");
 
 		// Save bounding boxed images to dir.
-		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "mixed");
+		BoundingBoxer::saveBoundingBoxImages(image, boundingboxStructs, R"(Res)", "Harten");
 
 		cv::waitKey(0);
 	}
@@ -210,6 +212,7 @@ void TestClass::testFloodFill()
 	}
 	else
 	{
+		
 		cv::Mat binaryImage;
 		// Convert to 16 bit
 		cvtColor(image, binaryImage, CV_BGR2GRAY);
