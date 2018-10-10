@@ -53,7 +53,7 @@ int FloodFill::getEnclosedPixels(const cv::Mat& image, const std::vector<cv::Poi
 	generateDoubleBoundary(boundaryImg, closeBoundaryImg, boundaryVec, closeVec);
 
 	fillImageEightConnected(closeBoundaryImg, boundaryVec, regionPixels, animation);
-	return regionPixels.size();
+	return static_cast<int>(regionPixels.size());
 }
 
 cv::Point FloodFill::calculateFirstPixel(const cv::Mat& img, const std::vector<cv::Point>& boundaryVec)
@@ -80,7 +80,7 @@ const std::vector<cv::Point> bottomPoints
 
 		}
 		// if the first pixel is not found move to the next pixel in the boundary
-		const int nextBoundaryPoint = (std::find(boundaryVec.begin(), boundaryVec.end(), firstBoundaryPoint) - boundaryVec.begin()) +1;
+		const int nextBoundaryPoint = static_cast<int>(std::find(boundaryVec.begin(), boundaryVec.end(), firstBoundaryPoint) - boundaryVec.begin() + 1);
 		firstBoundaryPoint = boundaryVec[nextBoundaryPoint];
 		
 	}
