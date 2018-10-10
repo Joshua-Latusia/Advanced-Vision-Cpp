@@ -1,22 +1,22 @@
-#include "CsvToTrainingSet.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <iterator>
 #include <opencv2/core/mat.hpp>
 #include <iostream>
+#include "CsvParser.h"
 
 
-CsvToTrainingSet::CsvToTrainingSet()
+CsvParser::CsvParser()
 {
 }
 
 
-CsvToTrainingSet::~CsvToTrainingSet()
+CsvParser::~CsvParser()
 {
 }
 
-void CsvToTrainingSet::bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
+void CsvParser::bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
 {
 	// Open filestream
 	std::ifstream fs;
@@ -52,7 +52,7 @@ void CsvToTrainingSet::bankNotesCsvtoTrainingSet(const std::string path, cv::Mat
 	fs.close();
 }
 
-csvColums CsvToTrainingSet::csvToTrainingSet(const std::string path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
+csvColums CsvParser::csvToTrainingSet(const std::string path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
 {
 	// Open filestream
 	std::ifstream fs;

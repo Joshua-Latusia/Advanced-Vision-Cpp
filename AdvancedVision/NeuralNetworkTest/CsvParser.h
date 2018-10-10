@@ -66,11 +66,11 @@ struct tokens : std::ctype<char>
 	}
 };
 
-class CsvToTrainingSet
+class CsvParser
 {
 public:
-	CsvToTrainingSet();
-	~CsvToTrainingSet();
+	CsvParser();
+	~CsvParser();
 	
 	/// <summary>
 	/// Converts a banknotes csv file to a trainingset
