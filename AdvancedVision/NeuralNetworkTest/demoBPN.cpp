@@ -10,7 +10,7 @@
 #include <string>
 #include <iomanip>
 #include "avansvisionlib20.h" // versie 2.0 (!)
-#include "CsvToTrainingSet.h"
+#include "CsvParser.h"
 
 
 // Maximale fout die toegestaan wordt in de output voor de training input
@@ -23,8 +23,10 @@ int main(int argc, char** argv)
 {
 	// IT, OT: input trainingset, output trainingset
 	cv::Mat_<double> ITset, OTset;
-	CsvToTrainingSet::bankNotesCsvtoTrainingSet(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotes.csv)", ITset, OTset);
+	csvColums csvColums = CsvParser::csvToTrainingSet(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotes.csv)", 4, ITset, OTset);
 
+	// Example of how to use write to Csv
+	CsvParser::writeToCsv(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotesResult.csv)", csvColums, ITset, OTset,true, true);
 	// V0, W0   : weightfactor matrices
 	// dV0, dW0 : weightfactor correction matrices
 	cv::Mat V0, W0, dW0, dV0;

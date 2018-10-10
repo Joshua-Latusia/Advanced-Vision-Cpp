@@ -91,6 +91,26 @@ public:
 	/// <param name="inputSet">The input set.</param>
 	/// <param name="outputSet">The output set.</param>
 	static csvColums csvToTrainingSet(const std::string path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
-
+	
+	/// <summary>
+	/// Writes set to CSV.
+	/// Will display error if file is already existing but trying to overwrite
+	/// </summary>
+	/// <param name="path">The path of where the file will be saved and created.</param>
+	/// <param name="csvColums">The CSV colums struct.</param>
+	/// <param name="completeSet">The whole set of data to write.</param>
+	/// <param name="removeBias">if set to <c>true</c> will remove bias column from the set (first col) . default = false</param>
+	static void writeToCsv(std::string path, csvColums& csvColums, cv::Mat_<double>& completeSet, bool overWriteExisting = false, bool removeBias = false);
+	
+	/// <summary>
+	/// Writes set to CSV by callin.
+	/// Will display error if file is already existing but trying to overwrite
+	/// <param name="path">The path of where the file will be saved and created.</param>
+	/// <param name="csvColums">The CSV colums struct.</param>
+	/// <param name="inputSet">The input set.</param>
+	/// <param name="outputSet">The output set.</param>
+	/// <param name="overWriteExisting">if set to <c>true</c> will overwrite existing files. default = false</param>
+	/// <param name="removeBias">if set to <c>true</c> will remove bias column from the inputset. default = false</param>
+	static void writeToCsv(const std::string path, csvColums & csvColums, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet, bool overWriteExisting = false, bool removeBias = false);
 };
 

@@ -5,6 +5,9 @@
 #include <opencv2/core/mat.hpp>
 #include <iostream>
 #include "CsvParser.h"
+#include "csvfile.h"
+#include <experimental/filesystem>
+#include <opencv2/core.hpp>
 
 
 CsvParser::CsvParser()
@@ -77,7 +80,7 @@ csvColums CsvParser::csvToTrainingSet(const std::string path, const int featureC
 
 	if(!csvColums.isValid())
 	{
-		// TODO return error if the struct is not valid
+		std::cout << "The Csv colums are invalid for file: " << path << std::endl;
 		return csvColums;
 	}
 
@@ -117,4 +120,54 @@ csvColums CsvParser::csvToTrainingSet(const std::string path, const int featureC
 	return csvColums;
 }
 	
+void CsvParser::writeToCsv(const std::string path, csvColums& csvColums, cv::Mat_<double>& completeSet, bool overWriteExisting, bool removeBias)
+{
+	// If not overwritable check if file exists
+	if(!overWriteExisting)
+	{
+		if (std::experimental::filesystem::exists(path))
+		{
+			// TODO return error and exit function
+			std::cout << "Trying to overwrite file on " << path << " while this is not permitted";
+			return;
+		}
+	}
 
+	if (removeBias)
+	{
+		// remove bias
+		completeSet = completeSet.colRange(1, completeSet.cols);
+	}
+
+	// Creates new csv or overwrite old one
+	csvfile csv(path,",");
+
+	// Add Column names
+	for (const auto columnName : csvColums.columnNames)
+	{
+		csv << columnName;
+	}
+	csv << endrow;
+	
+	// Add Data from left top to right bottom
+	for(int y = 0; y < completeSet.rows; ++y)
+	{
+		for(int x = 0; x < completeSet.cols; ++x)
+		{
+			csv << completeSet.at<double>(cv::Point(x, y));
+		}
+		csv << endrow;
+	}
+}
+
+void CsvParser::writeToCsv(const std::string path, csvColums& csvColums, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet, bool overWriteExisting, bool removeBias)
+{
+	if(removeBias)
+	{
+		inputSet = inputSet.colRange(1, inputSet.cols);
+	}
+
+	// append outputset tot the right of the inputset
+	hconcat(inputSet, outputSet, inputSet);
+	writeToCsv(path, csvColums, inputSet,overWriteExisting, false);
+}
