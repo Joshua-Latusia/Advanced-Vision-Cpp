@@ -10,8 +10,9 @@
 #include <string>
 #include <iomanip>
 #include "avansvisionlib20.h" // versie 2.0 (!)
-#include "Fase3Test.h"
-#include "CsvParser.h"
+
+using namespace cv;
+using namespace std;
 
 
 // Maximale fout die toegestaan wordt in de output voor de training input
@@ -22,65 +23,57 @@ const int MAXRUNS = 10000;
 
 int main(int argc, char** argv)
 {
-	//Fase3Test::HuMomentsTest();
-	//return 0;
-
 	// IT, OT: input trainingset, output trainingset
-	cv::Mat_<double> ITset, OTset;
-	csvColums csvColums = CsvParser::csvToTrainingSet(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotes.csv)", 4, ITset, OTset);
+	Mat ITset, OTset;
 
-	// Example of how to use write to Csv
-	CsvParser::writeToCsv(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotesResult.csv)", csvColums, ITset, OTset,true, true);
 	// V0, W0   : weightfactor matrices
 	// dV0, dW0 : weightfactor correction matrices
-	cv::Mat V0, W0, dW0, dV0;
+	Mat V0, W0, dW0, dV0;
 
 	// default number of hiddenNeurons. The definite number is user input  
 	// inputNeurons and outputNeurons are implicitly determined via
 	// the trainingset, i.e.: inputNeurons = ITset.cols ; outputNeurons = OTset.cols;
 	int hiddenNeurons = 2;
 
-	std::cout << std::endl << "Load testtrainingset..." << std::endl << std::endl;
-
-	//loadTrainingSet1(ITset, OTset);
+	cout << endl << "Load testtrainingset..." << endl << endl;
+	loadTrainingSet1(ITset, OTset);
 	//loadBinaryTrainingSet1(ITset, OTset);
 
-	std::cout << "Training Input " << std::endl << std::endl;
-	std::cout << ITset << std::endl << std::endl;
-	std::cout << "Training Output " << std::endl << std::endl;
-	std::cout << OTset << std::endl << std::endl;
+	cout << "Training Input " << endl << endl;
+	cout << ITset << endl << endl;
+	cout << "Training Output " << endl << endl;
+	cout << OTset << endl << endl;
 
-	std::cout << " ===> BPN format: " << std::endl <<
-		"BPN Inputlayer  = " << ITset.cols << "  neurons" << std::endl <<
-		"BPN Outputlayer = " << OTset.cols << "  neurons" << std::endl << std::endl;
-	std::cout << "Please choose a number of hidden neurons: ";
-	std::cin >> hiddenNeurons;
-	std::cout << "Thank you!" << std::endl << std::endl << std::endl;
+	cout << " ===> BPN format: " << endl <<
+		"BPN Inputlayer  = " << ITset.cols << "  neurons" << endl <<
+		"BPN Outputlayer = " << OTset.cols << "  neurons" << endl << endl;
+	cout << "Please choose a number of hidden neurons: ";
+	cin >> hiddenNeurons;
+	cout << "Thank you!" << endl << endl << endl;
 
-	std::cout << "Initialize BPN ..." << std::endl;
+	cout << "Initialize BPN ..." << endl;
 	initializeBPN(ITset.cols, hiddenNeurons, OTset.cols, V0, dV0, W0, dW0);
 	//testBPN(ITset, OTset, V0, dV0, W0, dW0);
 
-	std::cout << "initial values of weight matrices V0 and W0" << std::endl;
-	std::cout << "*******************************************" << std::endl;
-	std::cout << V0 << std::endl << std::endl << W0 << std::endl << std::endl;
-	std::cout << "Press ENTER => ";
-	std::string dummy;
-	getline(std::cin, dummy);
-	getline(std::cin, dummy);
+	cout << "initial values of weight matrices V0 and W0" << endl;
+	cout << "*******************************************" << endl;
+	cout << V0 << endl << endl << W0 << endl << endl;
+	cout << "Press ENTER => ";
+	string dummy;
+	getline(cin, dummy);
+	getline(cin, dummy);
 
 	// IT: current training input of the inputlayer 
 	// OT: desired training output of the BPN
 	// OH: output of the hiddenlayer
 	// OO: output of the outputlayer
-	cv::Mat IT, OT, OH, OO;
+	Mat IT, OT, OH, OO;
 
 	// outputError0: error on output for the current input and weighfactors V0, W0
 	// outputError1: error on output for the current input and new calculated 
 	//               weighfactors, i.e. V1, W1
-
 	double outputError0, outputError1, sumSqrDiffError = MAX_OUTPUT_ERROR + 1;
-	cv::Mat V1, W1;
+	Mat V1, W1;
 
 	int runs = 0;
 	while ((sumSqrDiffError > MAX_OUTPUT_ERROR) && (runs < MAXRUNS)) {
@@ -108,20 +101,20 @@ int main(int argc, char** argv)
 			V0 = V1;
 			W0 = W1;
 		}
-		std::cout << "sumSqrDiffError = " << sumSqrDiffError << std::endl;
+		cout << "sumSqrDiffError = " << sumSqrDiffError << endl;
 		runs++;
 	}
 
-	std::cout << "BPN Training is ready!" << std::endl << std::endl;
-	std::cout << "Runs = " << runs << std::endl << std::endl;
+	cout << "BPN Training is ready!" << endl << endl;
+	cout << "Runs = " << runs << endl << endl;
 
-	cv::Mat inputVectorTrainingSet, outputVectorTrainingSet, outputVectorBPN;
+	Mat inputVectorTrainingSet, outputVectorTrainingSet, outputVectorBPN;
 
 	// druk voor elke input vector uit de trainingset de output vector uit trainingset af 
 	// tezamen met de output vector die het getrainde BPN (zie V0, W0) genereerd bij de 
 	// betreffende input vector.
-	std::cout << std::setw(16) << " " << "Training Input" << std::setw(12) << "|" << " Expected Output "
-		<< std::setw(1) << "|" << " Output BPN " << std::setw(6) << "|" << std::endl << std::endl;
+	cout << setw(16) << " " << "Training Input" << setw(12) << "|" << " Expected Output "
+		<< setw(1) << "|" << " Output BPN " << setw(6) << "|" << endl << endl;
 	for (int row = 0; row < ITset.rows; row++) {
 
 		// haal volgende inputvector op uit de training set
@@ -129,16 +122,16 @@ int main(int argc, char** argv)
 
 		// druk de inputvector af in een regel afgesloten met | 
 		for (int r = 0; r < inputVectorTrainingSet.rows; r++)
-			std::cout << std::setw(8) << getEntry(inputVectorTrainingSet, r, 0);
-		std::cout << std::setw(2) << "|";
+			cout << setw(8) << getEntry(inputVectorTrainingSet, r, 0);
+		cout << setw(2) << "|";
 
 		// haal bijbehorende outputvector op uit de training set
 		outputVectorTrainingSet = transpose(getRow(OTset, row));
 
 		// druk de outputvector van de training set af in dezelfde regel afgesloten met | 
 		for (int r = 0; r < outputVectorTrainingSet.rows; r++)
-			std::cout << std::setw(8) << round(getEntry(outputVectorTrainingSet, r, 0));
-		std::cout << std::setw(2) << "|";
+			cout << setw(8) << round(getEntry(outputVectorTrainingSet, r, 0));
+		cout << setw(2) << "|";
 
 		// bepaal de outputvector die het getrainde BPN oplevert 
 		// bij de inputvector uit de trainingset  
@@ -146,15 +139,15 @@ int main(int argc, char** argv)
 
 		// druk de output vector van het BPN af in dezelfde regel afgesloten met |
 		for (int r = 0; r < outputVectorBPN.rows; r++)
-			std::cout << std::setw(8) << round(getEntry(outputVectorBPN, r, 0));
-		std::cout << std::setw(2) << "|";
+			cout << setw(8) << round(getEntry(outputVectorBPN, r, 0));
+		cout << setw(2) << "|";
 
-		std::cout << std::endl;
+		cout << endl;
 	}
 
-	std::cout << std::endl << std::endl << "Press ENTER for exit";
-	getline(std::cin, dummy);
-	getline(std::cin, dummy);
+	cout << endl << endl << "Press ENTER for exit";
+	getline(cin, dummy);
+	getline(cin, dummy);
 
 	return 0;
 }

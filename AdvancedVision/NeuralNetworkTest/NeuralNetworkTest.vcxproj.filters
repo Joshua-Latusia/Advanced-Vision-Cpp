@@ -21,10 +21,13 @@
     <ClInclude Include="avansvisionlib20.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CsvToTrainingSet.h">
+    <ClInclude Include="CsvParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fase3Test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csvfile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +38,7 @@
     <ClCompile Include="demoBPN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CsvToTrainingSet.cpp">
+    <ClCompile Include="CsvParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Fase3Test.cpp">
