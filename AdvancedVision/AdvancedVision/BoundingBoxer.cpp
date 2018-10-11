@@ -55,13 +55,17 @@ std::vector<cv::Point> BoundingBoxer::generateBoundingBox(boundingBoxStruct& ext
 	return points;
 }
 
-double BoundingBoxer::calculateLengthWidthRatio(boundingBoxStruct& extremes)
+double BoundingBoxer::getBoxRatio(boundingBoxStruct& extremes)
 {
-	return calculateLengthWidthRatio(extremes.max.x - extremes.min.x, extremes.max.y - extremes.min.y);
+	return getBoxRatio(extremes.max.x - extremes.min.x, extremes.max.y - extremes.min.y);
 }
 
-double BoundingBoxer::calculateLengthWidthRatio(int length, int width)
+double BoundingBoxer::getBoxRatio(int length, int width)
 {
+	if(width > length)
+		return static_cast<double>(width) / static_cast<double>(length);
+
+
 	return static_cast<double>(length) / static_cast<double>(width);
 }
 

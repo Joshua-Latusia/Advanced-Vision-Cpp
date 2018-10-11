@@ -59,17 +59,17 @@ public:
 	/// ratio of 1 means both sides are the same.
 	/// </summary>
 	/// <param name="extremes">The extremes of the bounding box.</param>
-	/// <returns>value giving the ratio</returns>
+	/// <returns>value giving the ratio between smallest divided by biggest </returns>
 	static double calculateLengthWidthRatio(boundingBoxStruct& extremes);
 	
 	/// <summary>
 	/// Calculates the length width ratio.
-	/// By dividing length by width.
+	/// By dividing smallest side by longest side.
 	/// ratio of 1 means both sides are the same.
 	/// </summary>
 	/// <param name="length">The length.</param>
 	/// <param name="width">The width.</param>
-	/// <returns>value giving the ratio</returns>
+	/// <returns>value giving the ratio between smallest divided by biggest</returns>
 	static double calculateLengthWidthRatio(int length, int width);
 
 private:
