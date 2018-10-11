@@ -7,6 +7,9 @@ class Main
 public:
 	Main();
 	~Main();
+	void TestHeart();
+	void TestLightning();
+	void runCamera();
 	void trainNetwork();
 	void setTestData(cv::String name, cv::Mat classification);
 };

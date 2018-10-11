@@ -46,9 +46,100 @@ int main(int argc, char* argv[])
 	std::cout << OTset << std::endl << std::endl;
 
 	main.trainNetwork();
-	
+	main.TestLightning();
+	//main.runCamera();
 	getchar();
 }
+
+
+
+
+void Main::TestLightning()
+{
+	cv::Mat image;
+	std::string path = "Res\\NeuralTestSets\\Lightningbolt\\Lightningbolt_Test.jpg";
+
+	ImageLoader::loadImageFromPath(image, path);
+
+
+	cv::Mat binaryImage;
+	// Convert to 16 bit
+	cvtColor(image, binaryImage, CV_BGR2GRAY);
+	binaryImage.convertTo(binaryImage, CV_16S);
+	threshold(binaryImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
+
+	cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+	std::vector<std::vector<cv::Point>> contourPoints;
+	MooreBoundaryTracer::getContours(binaryImage, contourPoints);
+
+
+
+
+	//calculates circularity
+	double perimeter = cv::arcLength(contourPoints[0], true);
+	double area = cv::contourArea(contourPoints[0]);
+	double circularity = 4 * CV_PI *(area / (perimeter*perimeter));
+	std::vector<cv::Point> approx;
+
+	//calculate if contour is convex
+
+
+	std::vector<cv::Point> convexHull;
+	cv::convexHull(contourPoints[0], convexHull);
+	bool isConvex = cv::isContourConvex(convexHull);
+
+	std::vector<int> convexHullI;
+	cv::convexHull(contourPoints[0], convexHullI);
+	std::vector<cv::Vec4i> defectPoints(convexHullI.size());
+	cv::convexityDefects(contourPoints[0], convexHullI, defectPoints);
+
+	auto hull_area = cv::contourArea(convexHull);
+
+	// calculate solidity
+	auto solidity = area / hull_area;
+
+	cv::Mat	IVec = (cv::Mat_<double>(1, 3) <<
+		circularity, (double)defectPoints.size() / 100, solidity);
+
+
+	
+	auto outputVectorBPN = BPN(IVec, V0, W0);
+
+	// druk de output vector van het BPN af in dezelfde regel afgesloten met |
+	for (int r = 0; r < outputVectorBPN.rows; r++)
+		std::cout << std::setw(8) << round(getEntry(outputVectorBPN, r, 0));
+}
+
+
+
+void Main::runCamera()
+{
+	cv::VideoCapture cap(0); // open the default camera
+	if (!cap.isOpened())  // check if we succeeded
+		return;
+
+	cv::Mat edges;
+	cv::namedWindow("liveFeed", 1);
+	for (;;)
+	{
+		cv::Mat frame;
+		cap >> frame; // get a new frame from camera
+		cv::Mat binaryImage;
+		cv::cvtColor(frame, binaryImage, CV_BGR2GRAY);
+		binaryImage.convertTo(binaryImage, CV_16S);
+		threshold(binaryImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
+
+		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
+		std::vector<std::vector<cv::Point>> contourPoints;
+		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
+		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
+
+		imshow("edges", contourImage * 255);
+		if (cv::waitKey(30) >= 0) break;
+	}
+	// the camera will be deinitialized automatically in VideoCapture destructor
+}
+
 
 
 
@@ -190,8 +281,8 @@ void Main::setTestData(cv::String name, cv::Mat classification)
 		std::cout << "solidity: " << solidity << std::endl;
 		
 
-		cv::Mat	IVec = (cv::Mat_<double>(1, 4) <<
-			circularity, (int)isConvex, (double)defectPoints.size()/100, solidity);
+		cv::Mat	IVec = (cv::Mat_<double>(1, 3) <<
+			circularity, (double)defectPoints.size()/100, solidity);
 		ITset.push_back(IVec);
 
 
