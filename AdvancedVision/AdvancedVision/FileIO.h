@@ -34,5 +34,13 @@ public:
 	/// <param name="filenames">The filenames to pass a filter on.</param>
 	/// <param name="extensionFilter">The extension filter of filextension to get.</param>
 	static void filterByExtension(std::vector<std::string>& filenames, std::vector<std::string> extensionFilter);
+	
+	/// <summary>
+	/// Loads file from path into math object.
+	/// </summary>
+	/// <param name="path">The path of where to load image from.</param>
+	/// <param name="image">The image.</param>
+	/// <returns>If the image contains data</returns>
+	static bool loadFromFile(std::string path, cv::Mat image);
 };
 

@@ -2,6 +2,7 @@
 #include <opencv2/imgcodecs/imgcodecs_c.h>
 #include <opencv2/imgcodecs.hpp>
 #include <experimental/filesystem>
+#include <iostream>
 
 namespace fs = std::experimental::filesystem;
 
@@ -52,4 +53,18 @@ void FileIO::filterByExtension(std::vector<std::string>& filenames, const std::v
 		}
 	}
 	filenames = result;
+}
+
+bool FileIO::loadFromFile(const std::string path, cv::Mat image)
+{
+	try
+	{
+		image = cv::imread(path, CV_LOAD_IMAGE_COLOR);
+		return image.data;
+	}
+	catch(cv::Exception& e)
+	{
+		std::cout << e.msg << std::endl;
+		return false;
+	}
 }
