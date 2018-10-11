@@ -55,6 +55,16 @@ std::vector<cv::Point> BoundingBoxer::generateBoundingBox(boundingBoxStruct& ext
 	return points;
 }
 
+double BoundingBoxer::calculateLengthWidthRatio(boundingBoxStruct& extremes)
+{
+	return calculateLengthWidthRatio(extremes.max.x - extremes.min.x, extremes.max.y - extremes.min.y);
+}
+
+double BoundingBoxer::calculateLengthWidthRatio(int length, int width)
+{
+	return static_cast<double>(length) / static_cast<double>(width);
+}
+
 boundingBoxStruct BoundingBoxer::getContourExtremes(std::vector<cv::Point>& contour)
 {
 	boundingBoxStruct boxStruct;
