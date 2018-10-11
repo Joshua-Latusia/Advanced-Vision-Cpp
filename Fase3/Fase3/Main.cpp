@@ -6,9 +6,9 @@
 #include "ImageLoader.h"
 #include <opencv2/imgproc.hpp>
 #include <vector>
-#include "../../../../../../../../Avans OpenCV/OpenCV/build/include/opencv2/core/hal/interface.h"
-#include <iomanip>
 
+#include <iomanip>
+#include <math.h>
 
 Main::Main()
 {
@@ -34,8 +34,11 @@ const int MAXRUNS = 10000;
 int main(int argc, char* argv[])
 {
 	Main main;
-	main.setTestData("Hearts", 0);
-	main.setTestData("Schoppen", 1);
+	//main.setTestData("Key", 0);
+	main.setTestData("Hearts", (cv::Mat_<double>(1, 2) << 0 , 0));
+	main.setTestData("Schoppen", (cv::Mat_<double>(1, 2) << 1, 0));
+	main.setTestData("Squares", (cv::Mat_<double>(1, 2) << 0, 1));
+	main.setTestData("Lightningbolt", (cv::Mat_<double>(1, 2) << 1, 1));
 
 	std::cout << "Training Input " << std::endl << std::endl;
 	std::cout << ITset << std::endl << std::endl;
@@ -132,7 +135,7 @@ void Main::trainNetwork()
 }
 
 
-void Main::setTestData(cv::String name, int outputValue)
+void Main::setTestData(cv::String name, cv::Mat classification)
 {
 	for(int imageIndex = 0; imageIndex < 6; imageIndex++)
 	{
@@ -152,15 +155,48 @@ void Main::setTestData(cv::String name, int outputValue)
 		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
 		std::vector<std::vector<cv::Point>> contourPoints;
 		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
-		cv::Moments mom = cv::moments(contourPoints[0]);
-		double huMoments[7];
-		cv::HuMoments(mom, huMoments);
+		
+	
 
-		cv::Mat	IVec = (cv::Mat_<double>(1, 7) <<
-			huMoments[0], huMoments[1], huMoments[2], huMoments[3], huMoments[4], huMoments[5], huMoments[6]);
+
+		//calculates circularity
+		double perimeter = cv::arcLength(contourPoints[0], true);
+		double area = cv::contourArea(contourPoints[0]);
+		double circularity = 4 * CV_PI *(area / (perimeter*perimeter));
+		std::vector<cv::Point> approx;
+
+		//calculate if contour is convex
+		
+
+		std::vector<cv::Point> convexHull;
+		cv::convexHull(contourPoints[0], convexHull);
+		bool isConvex = cv::isContourConvex(convexHull);
+
+		std::vector<int> convexHullI;
+		cv::convexHull(contourPoints[0], convexHullI);
+		std::vector<cv::Vec4i> defectPoints(convexHullI.size());
+		cv::convexityDefects(contourPoints[0], convexHullI, defectPoints);
+
+		auto hull_area = cv::contourArea(convexHull);
+
+		// calculate solidity
+		auto solidity = area / hull_area;
+
+
+		std::cout << name << "_" << imageIndex << "values" << std::endl;
+		std::cout << "circularity: " << circularity << std::endl;
+		std::cout << "isCOnvex: " << isConvex << std::endl;
+		std::cout << "convex defects: " << (double)defectPoints.size() / 100 << std::endl;
+		std::cout << "solidity: " << solidity << std::endl;
+		
+
+		cv::Mat	IVec = (cv::Mat_<double>(1, 4) <<
+			circularity, (int)isConvex, (double)defectPoints.size()/100, solidity);
 		ITset.push_back(IVec);
-		cv::Mat OVec = (cv::Mat_<double>(1, 1) << outputValue);
-		OTset.push_back(OVec);
+
+
+		//cv::Mat OVec = (cv::Mat_<double>(1, 2) << outputValue);
+		OTset.push_back(classification);
 	}
 }
 
