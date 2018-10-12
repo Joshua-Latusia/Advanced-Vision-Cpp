@@ -10,6 +10,7 @@ public:
 	void TestHeart();
 	void TestLightning();
 	void runCamera();
+	void createEmptyBorder(cv::Mat& image, int borderSize);
 	void trainNetwork();
 	void setTestData(cv::String name, cv::Mat classification);
 };

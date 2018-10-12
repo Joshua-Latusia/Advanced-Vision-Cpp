@@ -35,19 +35,19 @@ int main(int argc, char* argv[])
 {
 	Main main;
 	//main.setTestData("Key", 0);
-	main.setTestData("Hearts", (cv::Mat_<double>(1, 2) << 0 , 0));
-	main.setTestData("Schoppen", (cv::Mat_<double>(1, 2) << 1, 0));
-	main.setTestData("Squares", (cv::Mat_<double>(1, 2) << 0, 1));
-	main.setTestData("Lightningbolt", (cv::Mat_<double>(1, 2) << 1, 1));
+	//main.setTestData("Hearts", (cv::Mat_<double>(1, 2) << 0 , 0));
+	//main.setTestData("Schoppen", (cv::Mat_<double>(1, 2) << 1, 0));
+	//main.setTestData("Squares", (cv::Mat_<double>(1, 2) << 0, 1));
+	//main.setTestData("Lightningbolt", (cv::Mat_<double>(1, 2) << 1, 1));
 
 	std::cout << "Training Input " << std::endl << std::endl;
 	std::cout << ITset << std::endl << std::endl;
 	std::cout << "Training Output " << std::endl << std::endl;
 	std::cout << OTset << std::endl << std::endl;
 
-	main.trainNetwork();
-	main.TestLightning();
-	//main.runCamera();
+	//main.trainNetwork();
+	//main.TestLightning();
+	main.runCamera();
 	getchar();
 }
 
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 void Main::TestLightning()
 {
 	cv::Mat image;
-	std::string path = "Res\\NeuralTestSets\\Lightningbolt\\Lightningbolt_Test.jpg";
+	std::string path = "Res\\NeuralTestSets\\Lightningbolt\\Lightningbolt_0.jpg";
 
 	ImageLoader::loadImageFromPath(image, path);
 
@@ -114,12 +114,12 @@ void Main::TestLightning()
 
 void Main::runCamera()
 {
-	cv::VideoCapture cap(0); // open the default camera
+	cv::VideoCapture cap(1); // open the default camera
 	if (!cap.isOpened())  // check if we succeeded
 		return;
 
 	cv::Mat edges;
-	cv::namedWindow("liveFeed", 1);
+	//v::namedWindow("liveFeed", 1);
 	for (;;)
 	{
 		cv::Mat frame;
@@ -127,20 +127,45 @@ void Main::runCamera()
 		cv::Mat binaryImage;
 		cv::cvtColor(frame, binaryImage, CV_BGR2GRAY);
 		binaryImage.convertTo(binaryImage, CV_16S);
+
 		threshold(binaryImage, binaryImage, 100, 1, cv::THRESH_BINARY_INV);
 
+		createEmptyBorder(binaryImage, 10);
 		cv::Mat contourImage = cv::Mat::zeros(binaryImage.rows, binaryImage.cols, binaryImage.type());
 		std::vector<std::vector<cv::Point>> contourPoints;
-		MooreBoundaryTracer::getContours(binaryImage, contourPoints);
-		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
+		show16SImageClip(binaryImage, "feed");
 
-		imshow("edges", contourImage * 255);
+		//int border = 2;
+		//cv::Mat imageWithBorder = cv::Mat::zeros(binaryImage.rows + border*2, binaryImage.cols + border*2, binaryImage.type());
+		//cv::copyMakeBorder(binaryImage, imageWithBorder, border, border, border, border, CV_HAL_BORDER_REPLICATE);
+
+		
+
+
+
+		MooreBoundaryTracer::getContours(binaryImage, contourPoints, 100);
+		MooreBoundaryTracer::generateBoundaryImage(contourImage, contourPoints);
+		std::cout << "kekd" << std::endl;
+		//show16SImageClip(contourImage *255, "feed");
+		//imshow("edges", binaryImage * 255);
 		if (cv::waitKey(30) >= 0) break;
 	}
 	// the camera will be deinitialized automatically in VideoCapture destructor
 }
 
+void Main::createEmptyBorder(cv::Mat& image, int borderSize)
+{
+	cv::Mat borderedImage = cv::Mat::zeros(image.rows + borderSize* 2, image.cols + borderSize * 2, image.type());
 
+	for(int y = 0; y < image.rows; ++y)
+	{
+		for(int x = 0; x < image.cols; ++x)
+		{
+			borderedImage.at<ushort>(cv::Point(x + borderSize , y + borderSize )) = image.at<ushort>(cv::Point(x,y));
+		}
+	}
+	image = borderedImage;
+}
 
 
 void Main::trainNetwork()

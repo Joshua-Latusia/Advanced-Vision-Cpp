@@ -590,7 +590,7 @@ void show16SImageClip(cv::Mat m, std::string windowTitle) {
 	mCopy.convertTo(mCopy, CV_8U);
 	//	namedWindow("show16SImageClip", CV_WINDOW_AUTOSIZE);
 	imshow(windowTitle, mCopy);
-	cv::waitKey(0);
+	//cv::waitKey(0);
 } // show16SImage
 
 

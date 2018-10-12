@@ -77,6 +77,7 @@ void MooreBoundaryTracer::getBackTrackPixel(const cv::Mat & image, cv::Point& cu
 		// if its the top left pixel
 		if (currentPixel.y == 0)
 		{
+			return;
 			throw std::invalid_argument("The topleft pixel is the first non zero pixel");
 		}
 		backtrackPixel.x = currentPixel.x;
