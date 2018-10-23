@@ -2,16 +2,11 @@
 // Jan Oostindie, Avans Hogeschool, dd 6-12-2016
 // email: jac.oostindie@avans.nl
 
-//#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv/cv.h>
 #include <iostream>
 #include <string>
 #include <iomanip>
 #include "avansvisionlib20.h" // versie 2.0 (!)
 #include "CsvParser.h"
-
 
 // Maximale fout die toegestaan wordt in de output voor de training input
 const double MAX_OUTPUT_ERROR = 1E-10;
@@ -19,14 +14,18 @@ const double MAX_OUTPUT_ERROR = 1E-10;
 // maximaal aantal runs dat uitgevoerd wordt bij het trainen
 const int MAXRUNS = 10000;
 
+/// <summary>
+/// Starting point of the project.
+/// </summary>
 int main(int argc, char** argv)
 {
 	// IT, OT: input trainingset, output trainingset
 	cv::Mat_<double> ITset, OTset;
-	csvColums csvColums = CsvParser::csvToTrainingSet(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotes.csv)", 4, ITset, OTset);
+	csvColums csvColums = CsvParser::csvToTrainingSet(R"(Res\banknotes.csv)", 4, ITset, OTset);
 
 	// Example of how to use write to Csv
-	CsvParser::writeToCsv(R"(c:\Programming Projects\Advanced-Vision-Cpp\AdvancedVision\NeuralNetworkTest\Res\banknotesResult.csv)", csvColums, ITset, OTset,true, true);
+	CsvParser::writeToCsv(R"(Res\banknotesResult.csv)", csvColums, ITset, OTset,true, true);
+
 	// V0, W0   : weightfactor matrices
 	// dV0, dW0 : weightfactor correction matrices
 	cv::Mat V0, W0, dW0, dV0;
@@ -37,9 +36,6 @@ int main(int argc, char** argv)
 	int hiddenNeurons = 2;
 
 	std::cout << std::endl << "Load testtrainingset..." << std::endl << std::endl;
-
-	//loadTrainingSet1(ITset, OTset);
-	//loadBinaryTrainingSet1(ITset, OTset);
 
 	std::cout << "Training Input " << std::endl << std::endl;
 	std::cout << ITset << std::endl << std::endl;
