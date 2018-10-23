@@ -1,13 +1,11 @@
 #include "FloodFill.h"
 #include "FileIO.h"
 #include <windows.h>
-#include <stdio.h>
 #include <iostream>
 #include "MooreBoundaryTracer.h"
 
 
 // Defines for the algorithm pixel values
-
 #define BORDER_PIXEL 100
 #define DOUBLE_BOUNDARY_PIXEL 101
 #define EMPTY_PIXEL '-1'

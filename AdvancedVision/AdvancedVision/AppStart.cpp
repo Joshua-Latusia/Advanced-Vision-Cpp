@@ -68,7 +68,6 @@ void AppStart::askForTest()
 
 void AppStart::displayTest(const int caseNumber)
 {
-
 	switch (caseNumber)
 	{
 	case 1:

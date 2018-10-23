@@ -17,8 +17,6 @@ void ImageConverter::toGrayImage(cv::Mat& source, cv::Mat& output)
 	cvtColor(source, output, CV_BGR2GRAY);
 }
 
-
-
 void ImageConverter::getBinaryImage(const cv::Mat& image, cv::Mat& output, double thresh, double maxval)
 {
 	threshold(image, output, thresh, maxval, cv::THRESH_BINARY);

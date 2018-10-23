@@ -26,7 +26,6 @@ int BoundingBoxer::getBoundingBoxes(const std::vector<std::vector<cv::Point>>& c
 	}
 
 	return 1;
-
 }
 
 std::vector<cv::Point> BoundingBoxer::generateBoundingBox(boundingBoxStruct& extremes)
