@@ -10,6 +10,7 @@
 #include "avansvisionlib.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <iostream>
 
 // pre: (i < m.rows) & (j < m.cols)
 // Mat is call by reference

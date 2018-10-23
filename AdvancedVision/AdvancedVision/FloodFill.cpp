@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <iostream>
+#include "MooreBoundaryTracer.h"
 
 
 // Defines for the algorithm pixel values

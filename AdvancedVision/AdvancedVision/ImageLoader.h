@@ -2,6 +2,10 @@
 #define OUT
 #include <string>
 
+namespace cv {
+	class Mat;
+}
+
 class ImageLoader
 {
 public:
