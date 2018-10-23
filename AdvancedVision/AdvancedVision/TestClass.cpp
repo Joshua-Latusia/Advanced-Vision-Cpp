@@ -7,6 +7,7 @@
 #include "BendingEnergy.h"
 #include "BoundingBoxer.h"
 #include "FloodFill.h"
+#include <iostream>
 
 
 TestClass::TestClass()

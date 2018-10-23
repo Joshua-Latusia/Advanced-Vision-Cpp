@@ -1,5 +1,9 @@
 #pragma once
-#include <opencv2/core/mat.hpp>
+#include <vector>
+
+namespace cv {
+	class Mat;
+}
 
 class BendingEnergy
 {

@@ -6,7 +6,6 @@
 
 namespace fs = std::experimental::filesystem;
 
-
 FileIO::FileIO()
 {
 }
@@ -26,7 +25,8 @@ bool FileIO::saveImage(const cv::Mat& image, const std::string& path = "", const
 	return img.data;
 }
 
-void FileIO::getFilesFromDir(const std::string path, std::vector<std::string>& filenames, const std::vector<std::string> extensionFilter)
+void FileIO::getFilesFromDir(const std::string path, std::vector<std::string>& filenames, const std::vector<std::string>
+                             & extensionFilter)
 {
 	// get all files in dir
 	for (auto& s : fs::directory_iterator(path))
@@ -41,7 +41,7 @@ void FileIO::getFilesFromDir(const std::string path, std::vector<std::string>& f
 	}
 }
 
-void FileIO::filterByExtension(std::vector<std::string>& filenames, const std::vector<std::string> extensionFilter)
+void FileIO::filterByExtension(std::vector<std::string>& filenames, const std::vector<std::string>& extensionFilter)
 {
 	std::vector<std::string> result;
 	for (auto& filename : filenames)
@@ -55,7 +55,7 @@ void FileIO::filterByExtension(std::vector<std::string>& filenames, const std::v
 	filenames = result;
 }
 
-bool FileIO::loadFromFile(const std::string path, cv::Mat image)
+bool FileIO::loadFromFile(const std::string& path, cv::Mat image)
 {
 	try
 	{

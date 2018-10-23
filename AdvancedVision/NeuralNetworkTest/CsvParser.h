@@ -80,7 +80,7 @@ public:
 	/// <param name="path">The path of the file.</param>
 	/// <param name="inputSet">The input set.</param>
 	/// <param name="outputSet">The output set.</param>
-	static void bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
+	static void bankNotesCsvtoTrainingSet(const std::string& path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
 	
 	/// <summary>
 	/// Converts a csv file to a trainingset.
@@ -90,7 +90,7 @@ public:
 	/// <param name="featureColums"> Amount of colums that are a feature.</param>
 	/// <param name="inputSet">The input set.</param>
 	/// <param name="outputSet">The output set.</param>
-	static csvColums csvToTrainingSet(const std::string path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
+	static csvColums csvToTrainingSet(const std::string& path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet);
 	
 	/// <summary>
 	/// Writes set to CSV.
@@ -100,7 +100,7 @@ public:
 	/// <param name="csvColums">The CSV colums struct.</param>
 	/// <param name="completeSet">The whole set of data to write.</param>
 	/// <param name="removeBias">if set to <c>true</c> will remove bias column from the set (first col) . default = false</param>
-	static void writeToCsv(std::string path, csvColums& csvColums, cv::Mat_<double>& completeSet, bool overWriteExisting = false, bool removeBias = false);
+	static void writeToCsv(const std::string& path, csvColums& csvColums, cv::Mat_<double>& completeSet, bool overWriteExisting = false, bool removeBias = false);
 	
 	/// <summary>
 	/// Writes set to CSV by callin.
@@ -111,6 +111,6 @@ public:
 	/// <param name="outputSet">The output set.</param>
 	/// <param name="overWriteExisting">if set to <c>true</c> will overwrite existing files. default = false</param>
 	/// <param name="removeBias">if set to <c>true</c> will remove bias column from the inputset. default = false</param>
-	static void writeToCsv(const std::string path, csvColums & csvColums, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet, bool overWriteExisting = false, bool removeBias = false);
+	static void writeToCsv(const std::string& path, csvColums & csvColums, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet, bool overWriteExisting = false, bool removeBias = false);
 };
 

@@ -1,7 +1,5 @@
 #pragma once
 #include <vector>
-#include <opencv2/core/mat.hpp>
-#include "MooreBoundaryTracer.h"
 #include "avansvisionlib.h"
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>  

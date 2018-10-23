@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <opencv2/core/mat.hpp>
+#include "../NeuralNetworkTest/CsvParser.h"
 
 /// <summary>
 /// Struct to determine the extreme x and y values of a boundinbox
