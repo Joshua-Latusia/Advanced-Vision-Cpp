@@ -18,4 +18,4 @@ The second solution is "FinalAssignment"
   This was the final assignment we had to hand in for our final grade (which was a 7.5 out of 10)
   The idea of the project was to be able to distinct different object under a vision camera by differentiating between different features   of the objects like: Convexity, solidity and bending energy.
 
-Final overal grade was 7.5 out of 10!
+Final overall grade was 7.5 out of 10!
