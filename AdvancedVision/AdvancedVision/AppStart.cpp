@@ -1,6 +1,5 @@
 #include "AppStart.h"
 #include <iostream>
-#include "Camera.h"
 #include <opencv2/highgui/highgui.hpp>
 #include "TestClass.h"
 

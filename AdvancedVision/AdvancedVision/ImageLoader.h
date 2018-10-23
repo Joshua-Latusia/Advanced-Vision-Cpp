@@ -1,7 +1,6 @@
 #pragma once
 #define OUT
 #include <string>
-#include <opencv2/core/mat.hpp>
 
 class ImageLoader
 {

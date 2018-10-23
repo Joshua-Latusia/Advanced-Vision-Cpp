@@ -8,7 +8,6 @@
 // of sending an email to Jan Oostindie, i.e. jac.oostindie@avans.nl
 
 #include "avansvisionlib.h"
-#include <math.h>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 

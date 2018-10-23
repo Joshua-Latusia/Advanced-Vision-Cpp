@@ -19,7 +19,7 @@ CsvParser::~CsvParser()
 {
 }
 
-void CsvParser::bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
+void CsvParser::bankNotesCsvtoTrainingSet(const std::string& path, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
 {
 	// Open filestream
 	std::ifstream fs;
@@ -37,17 +37,17 @@ void CsvParser::bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<doubl
 		// Splitting line into seperated string with the comma delimiter
 		std::stringstream ss(line);
 		ss.imbue(std::locale(std::locale(), new tokens()));
-		std::istream_iterator<std::string> begin(ss);
-		std::istream_iterator<std::string> end;
+		const std::istream_iterator<std::string> begin(ss);
+		const std::istream_iterator<std::string> end;
 		std::vector<std::string> vstrings(begin, end);
 
 		// Add input to inputmatrix, the first element in the row should be a 1
-		cv::Mat inputRow = (cv::Mat_<double>(1, static_cast<int>(vstrings.size()) ) <<
+		const cv::Mat inputRow = (cv::Mat_<double>(1, static_cast<int>(vstrings.size()) ) <<
 			1, std::stod(vstrings[VARIANCE_INDEX]), std::stod(vstrings[SKEWNESS_INDEX]), std::stod(vstrings[CURTOSIS_INDEX]), std::stod(vstrings[ENTROPY_INDEX]));
 		inputSet.push_back(inputRow);
 
 		// Add output to outputmatrix
-		cv::Mat outputRow = (cv::Mat_<double>(1, 1) << std::stod(vstrings[CLASS_INDEX]));
+		const cv::Mat outputRow = (cv::Mat_<double>(1, 1) << std::stod(vstrings[CLASS_INDEX]));
 		outputSet.push_back(outputRow);
 	}
 
@@ -55,7 +55,7 @@ void CsvParser::bankNotesCsvtoTrainingSet(const std::string path, cv::Mat_<doubl
 	fs.close();
 }
 
-csvColums CsvParser::csvToTrainingSet(const std::string path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
+csvColums CsvParser::csvToTrainingSet(const std::string& path, const int featureColumns, cv::Mat_<double>& inputSet, cv::Mat_<double>& outputSet)
 {
 	// Open filestream
 	std::ifstream fs;
@@ -68,8 +68,8 @@ csvColums CsvParser::csvToTrainingSet(const std::string path, const int featureC
 	fs >> line;
 	std::stringstream ss(line);
 	ss.imbue(std::locale(std::locale(), new tokens()));
-	std::istream_iterator<std::string> begin(ss);
-	std::istream_iterator<std::string> end;
+	const std::istream_iterator<std::string> begin(ss);
+	const std::istream_iterator<std::string> end;
 	std::vector<std::string> columnNames(begin, end);
 
 	csvColums csvColums = {

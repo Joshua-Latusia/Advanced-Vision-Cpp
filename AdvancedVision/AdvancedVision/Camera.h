@@ -1,6 +1,4 @@
 #pragma once
-#include <opencv2/core/mat.hpp>
-#include <opencv2/videoio.hpp>
 
 #define WEBCAM 0
 #define EXTERNAL_CAM 1

@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <opencv2/core/mat.hpp>
 
 /// <summary>
 /// Struct to determine the extreme x and y values of a boundinbox
